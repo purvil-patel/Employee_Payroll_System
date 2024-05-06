@@ -13,6 +13,7 @@ public:
     Department(sqlite3 *db);
     void addDepartment();
     std::vector<std::string> getAllDepartmentNames() const;
+    bool departmentExists(const std::string& name);
 };
 
 #endif // DEPARTMENT_H
