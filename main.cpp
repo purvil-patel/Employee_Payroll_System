@@ -33,7 +33,8 @@ int main() {
             std::cout << "2. Add Department\n";
             std::cout << "3. Manage Pay Grade\n";  // New option for managing pay grades
             std::cout << "4. Manage Payroll\n";    // New option for managing payroll
-            std::cout << "5. Exit\n";
+            std::cout << "5. Get Departments\n";
+            std::cout << "6. Exit\n";
             std::cout << "Enter choice: ";
             std::cin >> choice;
 
@@ -54,6 +55,9 @@ int main() {
                     pr.saveToDatabase();
                     break;
                 case 5:
+                    dept.getAllDepartmentNames();
+                    break;
+                case 6:
                     running = false;
                     break;
                 default:
