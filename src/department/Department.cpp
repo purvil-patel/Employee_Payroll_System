@@ -56,16 +56,16 @@ std::vector<std::string> Department::getAllDepartmentNames() const {
     };
 
     int rc = sqlite3_exec(db, sql.c_str(), callback, &departmentNames, &zErrMsg);
-    // if (rc != SQLITE_OK) {
-    //     std::cerr << "SQL error: " << zErrMsg << std::endl;
-    //     sqlite3_free(zErrMsg);
-    // }
-    // else {
-    //     std::cout << "Departments List:\n";
-    //     for (const auto& name : departmentNames) {
-    //         std::cout << name << std::endl;
-    //     }
-    // }
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL error: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+    else {
+        std::cout << "Departments List:\n";
+        for (const auto& name : departmentNames) {
+            std::cout << name << std::endl;
+        }
+    }
     
     return departmentNames;
     
