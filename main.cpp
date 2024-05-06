@@ -20,21 +20,29 @@ int main() {
     if (login.authenticate(username, password)) {
         std::cout << "Logged in successfully!\n";
         
-        Employee emp(db);
         Department dept(db);
         PayGrade pg(db);  // Create PayGrade instance
+        Employee emp(db, &dept, &pg);
         Payroll pr(db);   // Create Payroll instance
 
         bool running = true;
+        std::string departmentName;
+        std::string employeeName;
+        std::string empName;
+        std::vector<PayGradeDetail> payGrades; 
         while (running) {
             int choice;
             std::cout << "Select an option:\n";
             std::cout << "1. Add Employee\n";
             std::cout << "2. Add Department\n";
-            std::cout << "3. Manage Pay Grade\n";  // New option for managing pay grades
-            std::cout << "4. Manage Payroll\n";    // New option for managing payroll
+            std::cout << "3. Manage Pay Grade\n";
+            std::cout << "4. Manage Payroll\n";
             std::cout << "5. Get Departments\n";
-            std::cout << "6. Exit\n";
+            std::cout << "6. List Paygrades by Department\n";
+            std::cout << "7. Get Employee Details\n"; 
+            std::cout << "8. View Payroll Records\n";
+            std::cout << "9. Delete Employee Details\n";
+            std::cout << "10. Exit\n";
             std::cout << "Enter choice: ";
             std::cin >> choice;
 
@@ -46,18 +54,43 @@ int main() {
                     dept.addDepartment();
                     break;
                 case 3:
-                    pg.inputGradeDetails();  // Input and save pay grade details
+                    pg.inputGradeDetails();
                     pg.saveToDatabase();
                     break;
                 case 4:
-                    pr.inputPayrollDetails();  // Input and calculate payroll details
-                    pr.calculateNetSalary(pr.getGross() * 0.25); // Assume 25% deductions
-                    pr.saveToDatabase();
+                    pr.inputSalaryDetails(); 
+                    pr.generatePayroll();    
+                    pr.saveToDatabase();  
                     break;
                 case 5:
                     dept.getAllDepartmentNames();
                     break;
                 case 6:
+                    // std::cin.ignore(); // Ignore any leftover newline in the buffer
+                    // std::cout << "Enter Department Name (or 'all' for all departments): ";
+                    // std::getline(std::cin, departmentName);
+                    // payGrades = pg.listPayGradesByDepartment(departmentName);
+                    // pg.printPayGrades(payGrades); // Use the new function
+                    pg.handleDepartmentSelectionAndDisplay();
+                    break;
+                case 7:
+                    // std::cin.ignore(); // Clear buffer
+                    // std::cout << "Enter Employee Name: ";
+                    // std::getline(std::cin, employeeName);
+                    // emp.getEmployee(employeeName); // Method to fetch and display employee details
+                    emp.handleEmployeeQuery();
+                    break;
+                case 8:
+                    // std::cin.ignore();  // Clear any leftover input
+                    // std::cout << "Enter Employee Name (leave blank for all records): ";
+                    // std::getline(std::cin, empName);
+                    // pr.displayPayrollRecords(empName); 
+                    pr.handlePayrollQuery();
+                    break;
+                case 9: 
+                    emp.handleDeleteEmployee();
+                    break;
+                case 10:
                     running = false;
                     break;
                 default:
@@ -65,7 +98,7 @@ int main() {
                     break;
             }
         }
-        std::cout << "Now you can perform operations on the Employee Payroll System.\n";
+        std::cout << "Exiting Employee Payroll System.\n";
     } else {
         std::cout << "Login failed.\n";
     }
