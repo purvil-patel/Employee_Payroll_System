@@ -21,14 +21,25 @@ void Department::addDepartment() {
     std::cin.ignore();
     std::getline(std::cin, name);  // Directly read the name
 
+    if (departmentExists(name)) {
+        std::cerr << "Error: Department name already exists.\n";
+        return;
+    }
+
     char *zErrMsg = 0;
-    std::string sql = "INSERT INTO department (name) VALUES ('" + name + "');";  // Removed deptId from INSERT
-    int rc = sqlite3_exec(db, sql.c_str(), 0, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
+    std::string sql = "INSERT INTO department (name) VALUES (?);";
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+
+        if (sqlite3_step(stmt) == SQLITE_DONE) {
+            std::cout << "Department added successfully!\n";
+        } else {
+            std::cerr << "SQL error in addDepartment: " << sqlite3_errmsg(db) << std::endl;
+        }
+        sqlite3_finalize(stmt);
     } else {
-        std::cout << "Department added successfully!\n";
+        std::cerr << "SQL error in addDepartment: " << sqlite3_errmsg(db) << std::endl;
     }
 }
 
@@ -45,18 +56,34 @@ std::vector<std::string> Department::getAllDepartmentNames() const {
     };
 
     int rc = sqlite3_exec(db, sql.c_str(), callback, &departmentNames, &zErrMsg);
-    if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }
-    else {
-        std::cout << "Departments List:\n";
-        for (const auto& name : departmentNames) {
-            std::cout << name << std::endl;
-        }
-    }
+    // if (rc != SQLITE_OK) {
+    //     std::cerr << "SQL error: " << zErrMsg << std::endl;
+    //     sqlite3_free(zErrMsg);
+    // }
+    // else {
+    //     std::cout << "Departments List:\n";
+    //     for (const auto& name : departmentNames) {
+    //         std::cout << name << std::endl;
+    //     }
+    // }
     
     return departmentNames;
     
 }
 
+bool Department::departmentExists(const std::string& name) {
+    std::string sql = "SELECT COUNT(name) FROM department WHERE name = ?";
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+
+        if (sqlite3_step(stmt) == SQLITE_ROW && sqlite3_column_int(stmt, 0) > 0) {
+            sqlite3_finalize(stmt);
+            return true;
+        }
+        sqlite3_finalize(stmt);
+    } else {
+        std::cerr << "SQL error in departmentExists: " << sqlite3_errmsg(db) << std::endl;
+    }
+    return false;
+}
