@@ -13,7 +13,8 @@ Employee::Employee(sqlite3 *db, Department *dept, PayGrade *payGrade) : db(db), 
                       "mobileNo TEXT, "
                       "state TEXT, "
                       "city TEXT, "
-                      "department TEXT);"; 
+                      "department TEXT, "
+                      "grade_name TEXT);";  
     int rc = sqlite3_exec(db, sql, nullptr, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << zErrMsg << std::endl;
@@ -24,7 +25,7 @@ Employee::Employee(sqlite3 *db, Department *dept, PayGrade *payGrade) : db(db), 
 }
 
 void Employee::addEmployee() {
-    std::string name, dob, doj, mobileNo, state, city, department;
+    std::string name, dob, doj, mobileNo, state, city, department, gradeName;
 
     // Fetch and list departments
     std::vector<std::string> departments = dept->getAllDepartmentNames();
@@ -47,10 +48,15 @@ void Employee::addEmployee() {
         gradeNames.push_back(gradeDetail.grade_name);
     }
 
-    // Print grade names
-    std::cout << "Available Pay Grades for " << department << ":" << std::endl;
-    for (const auto& name : gradeNames) {
-        std::cout << "Grade Name: " << name << std::endl;
+    if (!payGrades.empty()) {
+        std::cout << "Available Pay Grades for " << department << ":" << std::endl;
+        for (size_t i = 0; i < payGrades.size(); ++i) {
+            std::cout << i + 1 << ". " << payGrades[i].grade_name << std::endl;
+        }
+        int gradeChoice;
+        std::cin >> gradeChoice;
+        gradeName = payGrades[gradeChoice - 1].grade_name;
+        std::cout << "Selected Grade Name: " << gradeName << std::endl;
     }
 
     std::cout << "Enter Name: ";
@@ -68,9 +74,9 @@ void Employee::addEmployee() {
     std::cin >> city;
 
     char *zErrMsg = 0;
-    std::string sql = "INSERT INTO employee (name, dob, doj, mobileNo, state, city, department) VALUES ('"
+std::string sql = "INSERT INTO employee (name, dob, doj, mobileNo, state, city, department, grade_name) VALUES ('"
                       + name + "', '" + dob + "', '" + doj + "', '" + mobileNo + "', '" 
-                      + state + "', '" + city + "', '" + department + "');";
+                      + state + "', '" + city + "', '" + department + "', '" + gradeName + "');";
     int rc = sqlite3_exec(db, sql.c_str(), 0, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << zErrMsg << std::endl;
