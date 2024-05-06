@@ -41,7 +41,8 @@ int main() {
             std::cout << "6. List Paygrades by Department\n";
             std::cout << "7. Get Employee Details\n"; 
             std::cout << "8. View Payroll Records\n";
-            std::cout << "9. Exit\n";
+            std::cout << "9. Delete Employee Details\n";
+            std::cout << "10. Exit\n";
             std::cout << "Enter choice: ";
             std::cin >> choice;
 
@@ -86,7 +87,10 @@ int main() {
                     // pr.displayPayrollRecords(empName); 
                     pr.handlePayrollQuery();
                     break;
-                case 9:
+                case 9: 
+                    emp.handleDeleteEmployee();
+                    break;
+                case 10:
                     running = false;
                     break;
                 default:

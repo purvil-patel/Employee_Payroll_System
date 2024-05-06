@@ -18,6 +18,8 @@ public:
     void addEmployee();
     std::map<std::string, std::string> getEmployee(const std::string& name);
     void handleEmployeeQuery(); 
+    void deleteEmployee(const std::string& name);
+    void handleDeleteEmployee();
 };
 
 #endif // EMPLOYEE_H
