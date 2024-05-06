@@ -3,20 +3,37 @@
 
 #include <sqlite3.h>
 #include <string>
+#include <vector>
+#include <iostream>
+
+// Define a structure to store paygrade details
+struct PayGradeDetail {
+    std::string department_name;
+    std::string grade_name;
+    float basic_pay;
+    float dearness_allowance;
+    float travel_allowance;
+    float provident_fund;
+    float bonus;
+};
 
 class PayGrade {
 private:
-    int grade_id; // This will now be set to auto-increment in the database, so we don't need to input it directly.
-    std::string grade_name;
-    float grade_basic, grade_da, grade_ta, grade_pf, grade_bonus;
-    std::string department_name; // New field to store department name
     sqlite3* db;
+    std::string department_name;  // Declare as member variables
+    std::string grade_name;
+    float grade_basic;
+    float grade_da;
+    float grade_ta;
+    float grade_pf;
+    float grade_bonus;
 
 public:
     PayGrade(sqlite3* dbConnection);
     void inputGradeDetails();
     void saveToDatabase();
-    void listPayGradesByDepartment(const std::string& department);
+    std::vector<PayGradeDetail> listPayGradesByDepartment(const std::string& department);
+    void printPayGrades(const std::vector<PayGradeDetail>& payGrades);
 };
 
-#endif
+#endif // PAYGRADE_H
