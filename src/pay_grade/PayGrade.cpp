@@ -119,3 +119,18 @@ void PayGrade::printPayGrades(const std::vector<PayGradeDetail>& payGrades) {
                   << std::setw(10) << detail.bonus << std::endl;
     }
 }
+
+void PayGrade::handleDepartmentSelectionAndDisplay() {
+    std::string departmentName;
+    std::cin.ignore(); // Clear input buffer
+    std::cout << "Enter Department Name (or 'all' for all departments): ";
+    std::getline(std::cin, departmentName);  // Ensure this line executes.
+    std::cout << "Received input: " << departmentName << std::endl;  // Debug print
+
+    auto payGrades = listPayGradesByDepartment(departmentName);
+    if (payGrades.empty()) {
+        std::cout << "No pay grades found." << std::endl;
+    } else {
+        printPayGrades(payGrades);
+    }
+}

@@ -34,6 +34,7 @@ public:
     void saveToDatabase();
     std::vector<PayGradeDetail> listPayGradesByDepartment(const std::string& department);
     void printPayGrades(const std::vector<PayGradeDetail>& payGrades);
+    void handleDepartmentSelectionAndDisplay();
 };
 
 #endif // PAYGRADE_H

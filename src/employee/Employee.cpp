@@ -166,3 +166,11 @@ std::map<std::string, std::string> Employee::getEmployee(const std::string& name
     sqlite3_finalize(stmt);
     return employeeDetails;
 }
+
+void Employee::handleEmployeeQuery() {
+    std::string employeeName;
+    std::cin.ignore(); 
+    std::cout << "Enter Employee Name: ";
+    std::getline(std::cin, employeeName);
+    getEmployee(employeeName);
+}

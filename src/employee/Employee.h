@@ -17,6 +17,7 @@ public:
     Employee(sqlite3 *db, Department *dept, PayGrade *payGrade);
     void addEmployee();
     std::map<std::string, std::string> getEmployee(const std::string& name);
+    void handleEmployeeQuery(); 
 };
 
 #endif // EMPLOYEE_H
