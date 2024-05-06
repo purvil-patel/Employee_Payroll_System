@@ -1,4 +1,8 @@
 #include "Payroll.h"
+#include <chrono>
+#include <random>
+#include <sstream>
+#include <atomic>
 
 Payroll::Payroll(sqlite3* dbConnection) : db(dbConnection) {
     // SQL statement to create the Payroll table if it does not exist
@@ -30,11 +34,22 @@ void Payroll::inputSalaryDetails() {
     std::getline(std::cin, salary_issue_date);
 }
 
+std::atomic<int> Payroll::sequence_number(0);
+
+std::string Payroll::generateUniqueId(int emp_id) {
+    auto now = std::chrono::high_resolution_clock::now();
+    auto nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
+    int next_sequence = ++sequence_number;  // Atomically increment the sequence number
+
+    std::stringstream ss;
+    ss << emp_id << "-" << nanos << "-" << next_sequence;
+    return ss.str();
+}
+
 void Payroll::generatePayroll() {
-    char *errMsg = nullptr;
-    // Adjusted to fetch paygrade_name directly
+    // Query to fetch employee data
     std::string sql = "SELECT empId, name, department, grade_name FROM employee;";
-    sqlite3_stmt *stmt;
+    sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
@@ -43,23 +58,15 @@ void Payroll::generatePayroll() {
             detail.emp_name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
             detail.department_name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
             detail.paygrade_name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+            detail.transaction_id = generateUniqueId(detail.emp_id);
 
-            // Generate UUID
-            uuid_t binuuid;
-            char uuid[37];  // 36 byte UUID text and the null
-            uuid_generate_random(binuuid);
-            uuid_unparse_lower(binuuid, uuid);
-            detail.transaction_id = uuid;
-
-            // Set other details
+            // Set other details and calculate net salary
             detail.salary_issue_date = salary_issue_date;
             detail.salary_month = salary_month;
             detail.salary_year = salary_year;
-
-            // Calculate net salary using paygrade_name
             calculateNetSalary(detail, detail.paygrade_name);
 
-            // Push back to vector
+            // Push back to vector and later insert into the database
             payrollDetails.push_back(detail);
         }
         sqlite3_finalize(stmt);
@@ -116,15 +123,13 @@ std::vector<PayrollDetail> Payroll::getPayrollTable(const std::string& empName) 
     if (empName.empty()) {
         sql = "SELECT emp_id, emp_name, department_name, paygrade_name, transaction_id, salary_issue_date, salary_month, salary_year, emp_net_salary FROM Payroll;";
     } else {
-        sql = "SELECT emp_id, emp_name, department_name, paygrade_name, transaction_id, salary_issue_date, salary_month, salary_year, emp_net_salary FROM Payroll WHERE emp_name LIKE ?;";
+        sql = "SELECT emp_id, emp_name, department_name, paygrade_name, transaction_id, salary_issue_date, salary_month, salary_year, emp_net_salary FROM Payroll WHERE emp_name = ?;";
     }
 
     sqlite3_stmt *stmt;
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
         if (!empName.empty()) {
-            // Bind the employee name to the SQL query, using % for wildcard matching (if necessary)
-            std::string empNameWildcard = "%" + empName + "%";
-            sqlite3_bind_text(stmt, 1, empNameWildcard.c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, 1, empName.c_str(), -1, SQLITE_STATIC);
         }
 
         // Execute the SQL query and populate the vector with the results

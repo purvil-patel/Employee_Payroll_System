@@ -7,7 +7,9 @@
 #include <vector>
 #include <algorithm>
 #include <limits>
-#include "uuid/uuid.h"  // You need to have uuid library available
+#include <chrono>        // Include for high-resolution clock
+#include <atomic>        // Include for atomic operations
+#include <sstream>       // Include for string streaming
 
 struct PayrollDetail {
     int emp_id;
@@ -27,6 +29,8 @@ private:
     std::vector<PayrollDetail> payrollDetails;
     int salary_month, salary_year;
     std::string salary_issue_date;
+    static std::atomic<int> sequence_number;  // Static atomic counter for transaction IDs
+    std::string generateUniqueId(int emp_id);  // Method to generate unique transaction IDs
 
 public:
     Payroll(sqlite3* dbConnection);
