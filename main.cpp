@@ -26,15 +26,18 @@ int main() {
         Payroll pr(db);   // Create Payroll instance
 
         bool running = true;
+        std::string departmentName; // Moved declaration outside the switch
+
         while (running) {
             int choice;
             std::cout << "Select an option:\n";
             std::cout << "1. Add Employee\n";
             std::cout << "2. Add Department\n";
-            std::cout << "3. Manage Pay Grade\n";  // New option for managing pay grades
-            std::cout << "4. Manage Payroll\n";    // New option for managing payroll
+            std::cout << "3. Manage Pay Grade\n";
+            std::cout << "4. Manage Payroll\n";
             std::cout << "5. Get Departments\n";
-            std::cout << "6. Exit\n";
+            std::cout << "6. List Paygrades by Department\n";  // New option
+            std::cout << "7. Exit\n";
             std::cout << "Enter choice: ";
             std::cin >> choice;
 
@@ -46,11 +49,11 @@ int main() {
                     dept.addDepartment();
                     break;
                 case 3:
-                    pg.inputGradeDetails();  // Input and save pay grade details
+                    pg.inputGradeDetails();
                     pg.saveToDatabase();
                     break;
                 case 4:
-                    pr.inputPayrollDetails();  // Input and calculate payroll details
+                    pr.inputPayrollDetails();
                     pr.calculateNetSalary(pr.getGross() * 0.25); // Assume 25% deductions
                     pr.saveToDatabase();
                     break;
@@ -58,6 +61,12 @@ int main() {
                     dept.getAllDepartmentNames();
                     break;
                 case 6:
+                    std::cin.ignore(); // Ignore any leftover newline in the buffer
+                    std::cout << "Enter Department Name: ";
+                    std::getline(std::cin, departmentName);
+                    pg.listPayGradesByDepartment(departmentName);
+                    break;
+                case 7:
                     running = false;
                     break;
                 default:
@@ -65,7 +74,7 @@ int main() {
                     break;
             }
         }
-        std::cout << "Now you can perform operations on the Employee Payroll System.\n";
+        std::cout << "Exiting Employee Payroll System.\n";
     } else {
         std::cout << "Login failed.\n";
     }
