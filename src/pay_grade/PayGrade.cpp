@@ -61,6 +61,7 @@ void PayGrade::saveToDatabase() {
 
 std::vector<PayGradeDetail> PayGrade::listPayGradesByDepartment(const std::string& department) {
     std::vector<PayGradeDetail> payGrades;
+
     std::string sql;
     if (department == "all") {
         sql = "SELECT department_name, grade_name, grade_basic, grade_da, grade_ta, grade_pf, grade_bonus FROM PayGrade ORDER BY department_name;";

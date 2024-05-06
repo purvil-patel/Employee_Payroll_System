@@ -1,16 +1,19 @@
 #include "Employee.h"
 #include <iostream>
+#include <vector>
+#include <limits>
 
-Employee::Employee(sqlite3 *db) : db(db) {
+Employee::Employee(sqlite3 *db, Department *dept, PayGrade *payGrade) : db(db), dept(dept), payGrade(payGrade) {
     char *zErrMsg = 0;
     const char *sql = "CREATE TABLE IF NOT EXISTS employee ("
-                      "empId TEXT PRIMARY KEY, "
+                      "empId INTEGER PRIMARY KEY AUTOINCREMENT, "
                       "name TEXT NOT NULL, "
                       "dob TEXT NOT NULL, "
                       "doj TEXT NOT NULL, "
                       "mobileNo TEXT, "
                       "state TEXT, "
-                      "city TEXT);";
+                      "city TEXT, "
+                      "department TEXT);"; 
     int rc = sqlite3_exec(db, sql, nullptr, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << zErrMsg << std::endl;
@@ -21,11 +24,37 @@ Employee::Employee(sqlite3 *db) : db(db) {
 }
 
 void Employee::addEmployee() {
-    std::string empId, name, dob, doj, mobileNo, state, city;
-    std::cout << "Enter Employee ID: ";
-    std::cin >> empId;
+    std::string name, dob, doj, mobileNo, state, city, department;
+
+    // Fetch and list departments
+    std::vector<std::string> departments = dept->getAllDepartmentNames();
+    if (!departments.empty()) {
+        std::cout << "Select Department:" << std::endl;
+        for (size_t i = 0; i < departments.size(); ++i) {
+            std::cout << i + 1 << ". " << departments[i] << std::endl;
+        }
+        int choice;
+        std::cin >> choice;
+        department = departments[choice - 1];
+        std::cout << "Selected Department: " << department << std::endl;
+    }
+
+    // Fetch pay grades based on the selected department
+    std::vector<PayGradeDetail> payGrades = payGrade->listPayGradesByDepartment(department);
+    std::vector<std::string> gradeNames;
+
+    for (const auto& gradeDetail : payGrades) {
+        gradeNames.push_back(gradeDetail.grade_name);
+    }
+
+    // Print grade names
+    std::cout << "Available Pay Grades for " << department << ":" << std::endl;
+    for (const auto& name : gradeNames) {
+        std::cout << "Grade Name: " << name << std::endl;
+    }
+
     std::cout << "Enter Name: ";
-    std::cin.ignore(); // Ignore the newline character left in the input buffer
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
     std::getline(std::cin, name);
     std::cout << "Enter Date of Birth (YYYY-MM-DD): ";
     std::cin >> dob;
@@ -39,9 +68,9 @@ void Employee::addEmployee() {
     std::cin >> city;
 
     char *zErrMsg = 0;
-    std::string sql = "INSERT INTO employee (empId, name, dob, doj, mobileNo, state, city) VALUES ('" 
-                      + empId + "', '" + name + "', '" + dob + "', '" + doj + "', '" + mobileNo + "', '" 
-                      + state + "', '" + city + "');";
+    std::string sql = "INSERT INTO employee (name, dob, doj, mobileNo, state, city, department) VALUES ('"
+                      + name + "', '" + dob + "', '" + doj + "', '" + mobileNo + "', '" 
+                      + state + "', '" + city + "', '" + department + "');";
     int rc = sqlite3_exec(db, sql.c_str(), 0, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << zErrMsg << std::endl;

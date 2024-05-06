@@ -49,7 +49,7 @@ std::vector<std::string> Department::getAllDepartmentNames() const {
     std::string sql = "SELECT name FROM department;";
     auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
         std::vector<std::string>* names = static_cast<std::vector<std::string>*>(data);
-        if (argc == 1 && argv[0]) {
+        if (argc == 1 && argv[0] && argv[0][0] != '\0') {
             names->push_back(argv[0]);
         }
         return 0;

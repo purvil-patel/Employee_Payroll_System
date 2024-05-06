@@ -20,9 +20,9 @@ int main() {
     if (login.authenticate(username, password)) {
         std::cout << "Logged in successfully!\n";
         
-        Employee emp(db);
         Department dept(db);
         PayGrade pg(db);  // Create PayGrade instance
+        Employee emp(db, &dept, &pg);
         Payroll pr(db);   // Create Payroll instance
 
         bool running = true;
