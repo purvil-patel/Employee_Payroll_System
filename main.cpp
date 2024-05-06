@@ -26,8 +26,8 @@ int main() {
         Payroll pr(db);   // Create Payroll instance
 
         bool running = true;
-        std::string departmentName; // Moved declaration outside the switch
-
+        std::string departmentName;
+        std::vector<PayGradeDetail> payGrades; 
         while (running) {
             int choice;
             std::cout << "Select an option:\n";
@@ -62,9 +62,10 @@ int main() {
                     break;
                 case 6:
                     std::cin.ignore(); // Ignore any leftover newline in the buffer
-                    std::cout << "Enter Department Name: ";
+                    std::cout << "Enter Department Name (or 'all' for all departments): ";
                     std::getline(std::cin, departmentName);
-                    pg.listPayGradesByDepartment(departmentName);
+                    payGrades = pg.listPayGradesByDepartment(departmentName);
+                    pg.printPayGrades(payGrades); // Use the new function
                     break;
                 case 7:
                     running = false;
