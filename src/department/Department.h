@@ -1,6 +1,7 @@
 #ifndef DEPARTMENT_H
 #define DEPARTMENT_H
 
+#include <vector>
 #include <string>
 #include <sqlite3.h>
 
@@ -11,6 +12,7 @@ private:
 public:
     Department(sqlite3 *db);
     void addDepartment();
+    std::vector<std::string> getAllDepartmentNames() const;
 };
 
 #endif // DEPARTMENT_H
