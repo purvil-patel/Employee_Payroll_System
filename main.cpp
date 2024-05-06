@@ -4,11 +4,12 @@
 #include "src/user_authentication/Login.h"
 #include "src/employee/Employee.h"
 #include "src/department/Department.h"
+#include "src/database/Database.h"
+#include "src/pay_grade/PayGrade.h"
+#include "src/payroll/Payroll.h"
 
-int main()
-{
-    sqlite3 *db;
-    sqlite3_open("payroll_system.db", &db);
+int main() {
+    sqlite3* db = Database::getInstance().getConn();
     std::string username, password;
     std::cout << "Please enter your username: ";
     std::cin >> username;
@@ -18,9 +19,11 @@ int main()
     Login login(db);
     if (login.authenticate(username, password)) {
         std::cout << "Logged in successfully!\n";
-        // Add additional functionality post login
+        
         Employee emp(db);
         Department dept(db);
+        PayGrade pg(db);  // Create PayGrade instance
+        Payroll pr(db);   // Create Payroll instance
 
         bool running = true;
         while (running) {
@@ -28,7 +31,9 @@ int main()
             std::cout << "Select an option:\n";
             std::cout << "1. Add Employee\n";
             std::cout << "2. Add Department\n";
-            std::cout << "3. Exit\n";
+            std::cout << "3. Manage Pay Grade\n";  // New option for managing pay grades
+            std::cout << "4. Manage Payroll\n";    // New option for managing payroll
+            std::cout << "5. Exit\n";
             std::cout << "Enter choice: ";
             std::cin >> choice;
 
@@ -40,6 +45,15 @@ int main()
                     dept.addDepartment();
                     break;
                 case 3:
+                    pg.inputGradeDetails();  // Input and save pay grade details
+                    pg.saveToDatabase();
+                    break;
+                case 4:
+                    pr.inputPayrollDetails();  // Input and calculate payroll details
+                    pr.calculateNetSalary(pr.getGross() * 0.25); // Assume 25% deductions
+                    pr.saveToDatabase();
+                    break;
+                case 5:
                     running = false;
                     break;
                 default:
