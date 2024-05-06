@@ -2,6 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <map>
+#include <algorithm>
+#include <cctype>
 
 Employee::Employee(sqlite3 *db, Department *dept, PayGrade *payGrade) : db(db), dept(dept), payGrade(payGrade) {
     char *zErrMsg = 0;
@@ -84,4 +87,82 @@ std::string sql = "INSERT INTO employee (name, dob, doj, mobileNo, state, city, 
     } else {
         std::cout << "Employee added successfully!\n";
     }
+}
+
+
+// std::map<std::string, std::string> Employee::getEmployee(const std::string& name) {
+//     std::map<std::string, std::string> employeeDetails;
+//     std::string sql = "SELECT name, dob, doj, mobileNo, state, city, department, grade_name FROM employee WHERE name = ?";
+//     sqlite3_stmt* stmt;
+
+//     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+//         std::cerr << "SQL error in prepare: " << sqlite3_errmsg(db) << std::endl;
+//         return employeeDetails;
+//     }
+
+//     sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+
+//     if (sqlite3_step(stmt) == SQLITE_ROW) {
+//         employeeDetails["name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+//         employeeDetails["dob"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+//         employeeDetails["doj"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+//         employeeDetails["mobileNo"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+//         employeeDetails["state"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
+//         employeeDetails["city"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
+//         employeeDetails["department"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+//         employeeDetails["grade_name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
+
+//         // Print each detail
+//         std::cout << "Employee Details:" << std::endl;
+//         for (const auto& detail : employeeDetails) {
+//             std::cout << detail.first << ": " << detail.second << std::endl;
+//         }
+//     } else {
+//         std::cout << "No employee found with the name: " << name << std::endl;
+//     }
+
+//     sqlite3_finalize(stmt);
+//     return employeeDetails;
+// }
+
+std::map<std::string, std::string> Employee::getEmployee(const std::string& name) {
+    std::map<std::string, std::string> employeeDetails;
+    std::string lowerName = name;
+    std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+
+    // Prepare SQL query using LOWER() for case-insensitive comparison
+    std::string sql = "SELECT name, dob, doj, mobileNo, state, city, department, grade_name FROM employee WHERE LOWER(name) = LOWER(?)";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error in prepare: " << sqlite3_errmsg(db) << std::endl;
+        return employeeDetails;
+    }
+
+    // Bind the lowercase name to the SQL statement
+    sqlite3_bind_text(stmt, 1, lowerName.c_str(), -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        // Extract details from the row
+        employeeDetails["name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        employeeDetails["dob"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        employeeDetails["doj"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        employeeDetails["mobileNo"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+        employeeDetails["state"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
+        employeeDetails["city"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
+        employeeDetails["department"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+        employeeDetails["grade_name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
+
+        // Print each detail
+        std::cout << "Employee Details:" << std::endl;
+        for (const auto& detail : employeeDetails) {
+            std::cout << detail.first << ": " << detail.second << std::endl;
+        }
+    } else {
+        std::cout << "No employee found with the name: " << name << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
+    return employeeDetails;
 }

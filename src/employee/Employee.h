@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sqlite3.h>
+#include <map>
 #include "../department/Department.h"
 #include "../pay_grade/PayGrade.h"
 
@@ -15,6 +16,7 @@ private:
 public:
     Employee(sqlite3 *db, Department *dept, PayGrade *payGrade);
     void addEmployee();
+    std::map<std::string, std::string> getEmployee(const std::string& name);
 };
 
 #endif // EMPLOYEE_H

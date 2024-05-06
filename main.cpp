@@ -27,6 +27,7 @@ int main() {
 
         bool running = true;
         std::string departmentName;
+        std::string employeeName;
         std::vector<PayGradeDetail> payGrades; 
         while (running) {
             int choice;
@@ -36,8 +37,9 @@ int main() {
             std::cout << "3. Manage Pay Grade\n";
             std::cout << "4. Manage Payroll\n";
             std::cout << "5. Get Departments\n";
-            std::cout << "6. List Paygrades by Department\n";  // New option
-            std::cout << "7. Exit\n";
+            std::cout << "6. List Paygrades by Department\n";
+            std::cout << "7. Get Employee Details\n"; 
+            std::cout << "8. Exit\n";
             std::cout << "Enter choice: ";
             std::cin >> choice;
 
@@ -68,6 +70,12 @@ int main() {
                     pg.printPayGrades(payGrades); // Use the new function
                     break;
                 case 7:
+                    std::cin.ignore(); // Clear buffer
+                    std::cout << "Enter Employee Name: ";
+                    std::getline(std::cin, employeeName);
+                    emp.getEmployee(employeeName); // Method to fetch and display employee details
+                    break;
+                case 8:
                     running = false;
                     break;
                 default:
