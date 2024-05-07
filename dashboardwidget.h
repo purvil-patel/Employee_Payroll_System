@@ -5,6 +5,7 @@
 #include "departmentwidget.h"
 #include "manageemployeewidget.h"
 #include "managepaygrade.h"
+#include "manageemppayroll.h"
 
 namespace Ui {
 class DashboardWidget;
@@ -30,11 +31,14 @@ private slots:
 
     void on_managePaygrade_clicked();
 
+    void on_manageEmpPayrole_clicked();
+
 private:
     Ui::DashboardWidget *ui;
     Departmentwidget departmentwidget;
     ManageEmployeeWidget manageempwidget;
     ManagePaygrade managePaygrade;
+    ManageEmpPayroll manageEmpPayroll;
     int currentIndex;
 
 signals:

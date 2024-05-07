@@ -1,6 +1,7 @@
 #include "Department.h"
 #include <iostream>
 
+
 Department::Department(sqlite3 *db) : db(db) {
     char *zErrMsg = 0;
     const char *sql = "CREATE TABLE IF NOT EXISTS department ("
@@ -15,15 +16,15 @@ Department::Department(sqlite3 *db) : db(db) {
     }
 }
 
-void Department::addDepartment() {
-    std::string name;
+std::pair<bool, std::string> Department::addDepartment(const std::string name) {
+    //std::string name;
     std::cout << "Enter Department Name: ";
-    std::cin.ignore();
-    std::getline(std::cin, name);  // Directly read the name
+    //std::cin.ignore();
+    //std::getline(std::cin, name);  // Directly read the name
 
     if (departmentExists(name)) {
         std::cerr << "Error: Department name already exists.\n";
-        return;
+        return {false ,"Error: Department name already exists."};
     }
 
     char *zErrMsg = 0;
@@ -34,12 +35,15 @@ void Department::addDepartment() {
 
         if (sqlite3_step(stmt) == SQLITE_DONE) {
             std::cout << "Department added successfully!\n";
+            return {true,name + " Department added successfully!\n"};
         } else {
             std::cerr << "SQL error in addDepartment: " << sqlite3_errmsg(db) << std::endl;
+            return {false,"Error in adding new department."};
         }
         sqlite3_finalize(stmt);
     } else {
         std::cerr << "SQL error in addDepartment: " << sqlite3_errmsg(db) << std::endl;
+        return {false,"Error in adding new department."};
     }
 }
 
