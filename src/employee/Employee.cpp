@@ -158,35 +158,21 @@ std::map<std::string, std::string> Employee::getEmployee(const std::string& name
 }
 
 
-void Employee::deleteEmployee(const std::string &name)
-{
-    // Check if the employee exists
-    if (!getEmployee(name).empty())
-    {
-        std::string sql = "DELETE FROM employee WHERE name = ?";
-        sqlite3_stmt *stmt;
+void Employee::deleteEmployee(const std::string &empId) {
+    // Prepare the SQL DELETE statement using empId
+    std::string sql = "DELETE FROM employee WHERE empId = ?";
+    sqlite3_stmt *stmt;
 
-        if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK)
-        {
-            sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
-            if (sqlite3_step(stmt) == SQLITE_DONE)
-            {
-                std::cout << "Employee successfully deleted.\n";
-            }
-            else
-            {
-                std::cerr << "Failed to delete employee: " << sqlite3_errmsg(db) << std::endl;
-            }
-            sqlite3_finalize(stmt);
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, empId.c_str(), -1, SQLITE_STATIC);
+        if (sqlite3_step(stmt) == SQLITE_DONE) {
+            std::cout << "Employee successfully deleted.\n";
+        } else {
+            std::cerr << "Failed to delete employee: " << sqlite3_errmsg(db) << std::endl;
         }
-        else
-        {
-            std::cerr << "SQL prepare error: " << sqlite3_errmsg(db) << std::endl;
-        }
-    }
-    else
-    {
-        std::cout << "No employee found with the name: " << name << std::endl;
+        sqlite3_finalize(stmt);
+    } else {
+        std::cerr << "SQL prepare error: " << sqlite3_errmsg(db) << std::endl;
     }
 }
 
@@ -235,13 +221,12 @@ void Employee::handleEmployeeQuery()
     getEmployee(employeeName);
 }
 
-void Employee::handleDeleteEmployee()
-{
-    std::string employeeName;
+void Employee::handleDeleteEmployee() {
+    std::string employeeId;
     std::cin.ignore();
-    std::cout << "Enter Employee Name: ";
-    std::getline(std::cin, employeeName);
-    deleteEmployee(employeeName);
+    std::cout << "Enter Employee ID: ";
+    std::getline(std::cin, employeeId);
+    deleteEmployee(employeeId);
 }
 
 void Employee::handleUpdateEmployee()
