@@ -65,10 +65,10 @@ std::vector<std::string> Department::getAllDepartmentNames() const {
         sqlite3_free(zErrMsg);
     }
     else {
-        std::cout << "Departments List:\n";
-        for (const auto& name : departmentNames) {
-            std::cout << name << std::endl;
-        }
+        std::cout << "Departments Fetched\n";
+        // for (const auto& name : departmentNames) {
+        //     std::cout << name << std::endl;
+        // }
     }
     
     return departmentNames;

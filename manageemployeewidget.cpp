@@ -113,14 +113,30 @@ void ManageEmployeeWidget::addEmployee() {
 
     // Call the backend function to add an employee
     if (!name.isEmpty() && !dob.isEmpty() && !doj.isEmpty()) { // Minimal validation example
-        employee->addEmployee(name.toStdString(), dob.toStdString(), doj.toStdString(),
+        bool result = employee->addEmployee(name.toStdString(), dob.toStdString(), doj.toStdString(),
                               mobileNo.toStdString(), state.toStdString(), city.toStdString(),
                               department.toStdString(), gradeName.toStdString());
+
+        if(result){
+            QMessageBox::information(this, "Success", "Record Inserted!!");
+        }else{
+            QMessageBox::warning(this, "Failure", "Error Occured!!!");
+        }
+
 
     } else {
         // Handle the error case or invalid input
         QMessageBox::warning(this, "Input Error", "Please fill in all required fields.");
     }
+
+    ui->lineEdit->clear();
+    ui->lineEdit_6->clear();
+    ui->lineEdit_5->clear();
+    ui->lineEdit_7->clear();
+    ui->lineEdit_2->clear();
+    ui->lineEdit_8->clear();
+    ui->comboBox->currentText();
+    ui->comboBox_2->currentText();
 }
 
 
