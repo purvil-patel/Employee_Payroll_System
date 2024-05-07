@@ -41,7 +41,9 @@ ManageEmployeeWidget::ManageEmployeeWidget(QWidget *parent)
     connect(ui->pushButton_2, &QPushButton::clicked, this, &ManageEmployeeWidget::on_addButton_clicked);
 
     //connect(ui->comboBox, &QComboBox::highlighted, this, &ManageEmployeeWidget::updateDepartmentComboBox);
-    connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(updatePayGradeComboBox(QString)));
+    //connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(updatePayGradeComboBox(QString)));
+    connect(ui->comboBox, &QComboBox::currentTextChanged, this, &ManageEmployeeWidget::updatePayGradeComboBox);
+
     connect(ui->pushButton_3, &QPushButton::clicked, this, &ManageEmployeeWidget::addEmployee);
 
 }
@@ -61,43 +63,54 @@ void ManageEmployeeWidget::updateDepartmentComboBox() {
 
 // Dummy Implementation for testing
 
-void ManageEmployeeWidget::updatePayGradeComboBox(const QString &departmentName) {
-    ui->comboBox_2->clear(); // Clear existing items
-
-    // Hardcoded grade names for testing the dropdown functionality
-    std::vector<std::string> gradeNames = {
-        "Junior Developer",
-        "Senior Developer",
-        "Project Manager",
-        "Quality Assurance",
-        "User Experience Designer"
-    };
-
-    // Populate the ComboBox with hardcoded grade names
-    for (const std::string &name : gradeNames) {
-        ui->comboBox_2->addItem(QString::fromStdString(name));
-    }
-}
-
-// Actual Implementation
-
 // void ManageEmployeeWidget::updatePayGradeComboBox(const QString &departmentName) {
 //     ui->comboBox_2->clear(); // Clear existing items
 
-//     // Fetch the details of pay grades based on the selected department
-//     std::vector<PayGradeDetail> payGrades = payGrade->listPayGradesByDepartment(departmentName.toStdString());
-//     std::vector<std::string> gradeNames;
+//     // Hardcoded grade names for testing the dropdown functionality
+//     std::vector<std::string> gradeNames = {
+//         "Junior Developer",
+//         "Senior Developer",
+//         "Project Manager",
+//         "Quality Assurance",
+//         "User Experience Designer"
+//     };
 
-//     // Extract just the names from the PayGradeDetail structures
-//     for (const auto &gradeDetail : payGrades) {
-//         gradeNames.push_back(gradeDetail.grade_name);
-//     }
-
-//     // Populate the ComboBox with grade names
+//     // Populate the ComboBox with hardcoded grade names
 //     for (const std::string &name : gradeNames) {
 //         ui->comboBox_2->addItem(QString::fromStdString(name));
 //     }
 // }
+
+// Actual Implementation
+
+void ManageEmployeeWidget::updatePayGradeComboBox(const QString &departmentName) {
+    ui->comboBox_2->clear(); // Clear existing items
+    qDebug() << "Department selected:" << departmentName;
+    // Fetch the details of pay grades based on the selected department
+    std::vector<PayGradeDetail> payGrades = payGrade->listPayGradesByDepartment(departmentName.toStdString());
+    std::vector<std::string> gradeNames;
+
+    // gradeNames = {
+    //     "Junior Developer",
+    //     "Senior Developer",
+    //     "Project Manager",
+    //     "Quality Assurance",
+    //     "User Experience Designer"
+    // };
+
+    // Extract just the names from the PayGradeDetail structures
+    for (const auto &gradeDetail : payGrades) {
+        gradeNames.push_back(gradeDetail.grade_name);
+        std::cout<<"EEEEEEEEE"<<gradeDetail.grade_name;
+    }
+
+
+
+    // Populate the ComboBox with grade names
+    for (const std::string &name : gradeNames) {
+        ui->comboBox_2->addItem(QString::fromStdString(name));
+    }
+}
 
 // In ManageEmployeeWidget.cpp
 void ManageEmployeeWidget::addEmployee() {
