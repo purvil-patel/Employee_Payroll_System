@@ -10,6 +10,7 @@ DashboardWidget::DashboardWidget(QWidget *parent)
     ui->stackedWidget->addWidget(&departmentwidget);
     ui->stackedWidget->addWidget(&manageempwidget);
     ui->stackedWidget->addWidget(&managePaygrade);
+    ui->stackedWidget->addWidget(&manageEmpPayroll);
 
 
     currentIndex = ui->stackedWidget->currentIndex();
@@ -17,6 +18,7 @@ DashboardWidget::DashboardWidget(QWidget *parent)
     connect(&manageempwidget,SIGNAL(backHome()),this,SLOT(moveBackHome()));
     connect(&departmentwidget,SIGNAL(backHome()),this,SLOT(moveBackHome()));
     connect(&managePaygrade,SIGNAL(backHome()),this,SLOT(moveBackHome()));
+    connect(&manageEmpPayroll,SIGNAL(backHome()),this,SLOT(moveBackHome()));
 }
 
 DashboardWidget::~DashboardWidget()
@@ -51,5 +53,11 @@ void DashboardWidget::moveBackHome()
 void DashboardWidget::on_managePaygrade_clicked()
 {
     ui->stackedWidget->setCurrentWidget(&managePaygrade);
+}
+
+
+void DashboardWidget::on_manageEmpPayrole_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(&manageEmpPayroll);
 }
 
