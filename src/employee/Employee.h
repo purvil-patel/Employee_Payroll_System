@@ -24,6 +24,7 @@ public:
     void updateEmployee(const std::string& empId, const std::string& name, const std::string& dob, const std::string& doj, const std::string& mobileNo, const std::string& state, const std::string& city, const std::string& department, const std::string& gradeName);
     void handleUpdateEmployee();
     void handleAddEmployee();
+    std::vector<std::map<std::string, std::string>> getAllEmployees();
 };
 
 #endif // EMPLOYEE_H

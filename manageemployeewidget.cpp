@@ -2,6 +2,7 @@
 #include "ui_manageemployeewidget.h"
 #include "src/database/Database.h"
 #include <QMessageBox>
+#include <iostream>
 
 ManageEmployeeWidget::ManageEmployeeWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::ManageEmployeeWidget)
@@ -10,6 +11,10 @@ ManageEmployeeWidget::ManageEmployeeWidget(QWidget *parent)
 , payGrade(std::make_unique<PayGrade>(Database::getInstance().getConn()))
 {
     ui->setupUi(this);
+
+    ui->tableWidget_employees->setColumnCount(8);
+    QStringList headers = {"ID", "Name", "DOB", "DOJ", "Mobile No", "State", "City", "Department", "Grade Name"};
+    ui->tableWidget_employees->setHorizontalHeaderLabels(headers);
 
     // std::vector<std::string> departments = department->getAllDepartmentNames();
 
@@ -36,6 +41,7 @@ ManageEmployeeWidget::ManageEmployeeWidget(QWidget *parent)
     ui->label_8->setVisible(false);
     ui->label_9->setVisible(false);
     ui->label_10->setVisible(false);
+    ui->tableWidget_employees->setVisible(false);
 
     // Connect the Add button's clicked signal to the slot
     connect(ui->pushButton_2, &QPushButton::clicked, this, &ManageEmployeeWidget::on_addButton_clicked);
@@ -45,6 +51,7 @@ ManageEmployeeWidget::ManageEmployeeWidget(QWidget *parent)
     connect(ui->comboBox, &QComboBox::currentTextChanged, this, &ManageEmployeeWidget::updatePayGradeComboBox);
 
     connect(ui->pushButton_3, &QPushButton::clicked, this, &ManageEmployeeWidget::addEmployee);
+    connect(ui->pushButton_view, &QPushButton::clicked, this, &ManageEmployeeWidget::on_pushButton_view_clicked);
 
 }
 
@@ -181,29 +188,96 @@ void ManageEmployeeWidget::on_addButton_clicked()
 {
 
     // Toggle the visibility of the input fields, labels, and Add Employee button
-    bool isVisible = ui->lineEdit->isVisible();
-    ui->lineEdit->setVisible(!isVisible);
-    ui->lineEdit_2->setVisible(!isVisible);
-    ui->lineEdit_5->setVisible(!isVisible);
-    ui->lineEdit_6->setVisible(!isVisible);
-    ui->lineEdit_7->setVisible(!isVisible);
-    ui->lineEdit_8->setVisible(!isVisible);
-    ui->comboBox->setVisible(!isVisible);
-    ui->comboBox_2->setVisible(!isVisible);
-    ui->pushButton_3->setVisible(!isVisible);
+    ui->tableWidget_employees->setVisible(false);
+    ui->lineEdit->setVisible(true);
+    ui->lineEdit_2->setVisible(true);
+    ui->lineEdit_5->setVisible(true);
+    ui->lineEdit_6->setVisible(true);
+    ui->lineEdit_7->setVisible(true);
+    ui->lineEdit_8->setVisible(true);
+    ui->comboBox->setVisible(true);
+    ui->comboBox_2->setVisible(true);
+    ui->pushButton_3->setVisible(true);
     // Toggling the labels' visibility
-    ui->label_2->setVisible(!isVisible);
-    ui->label_3->setVisible(!isVisible);
-    ui->label_5->setVisible(!isVisible);
-    ui->label_6->setVisible(!isVisible);
-    ui->label_7->setVisible(!isVisible);
-    ui->label_8->setVisible(!isVisible);
-    ui->label_9->setVisible(!isVisible);
-    ui->label_10->setVisible(!isVisible);
+    ui->label_2->setVisible(true);
+    ui->label_3->setVisible(true);
+    ui->label_5->setVisible(true);
+    ui->label_6->setVisible(true);
+    ui->label_7->setVisible(true);
+    ui->label_8->setVisible(true);
+    ui->label_9->setVisible(true);
+    ui->label_10->setVisible(true);
     if(ui->comboBox->isVisible()){
         updateDepartmentComboBox();
 
         // For Testing
         updatePayGradeComboBox("Dummy Department");
     }
+}
+
+void ManageEmployeeWidget::on_pushButton_view_clicked() {
+    ui->lineEdit->setVisible(false);
+    ui->lineEdit_2->setVisible(false);
+    ui->lineEdit_5->setVisible(false);
+    ui->lineEdit_6->setVisible(false);
+    ui->lineEdit_7->setVisible(false);
+    ui->lineEdit_8->setVisible(false);
+    ui->comboBox->setVisible(false);
+    ui->comboBox_2->setVisible(false);
+    ui->pushButton_3->setVisible(false);
+    // Hiding the labels
+    ui->label_2->setVisible(false);
+    ui->label_3->setVisible(false);
+    ui->label_5->setVisible(false);
+    ui->label_6->setVisible(false);
+    ui->label_7->setVisible(false);
+    ui->label_8->setVisible(false);
+    ui->label_9->setVisible(false);
+    ui->label_10->setVisible(false);
+    ui->tableWidget_employees->setVisible(true);
+    // std::cout << "View button clicked for Employee!" << std::endl;
+
+    // Clear any existing rows
+    ui->tableWidget_employees->setRowCount(0);
+
+    std::vector<std::map<std::string, std::string>> allEmployees = employee->getAllEmployees();
+
+    // Check if any employees were fetched
+    if (allEmployees.empty()) {
+        std::cout << "No employees found in the database." << std::endl;
+    } else {
+        std::cout << "Number of employees found: " << allEmployees.size() << std::endl;
+    }
+
+    // Add new rows with the fetched data
+    for (size_t row = 0; row < allEmployees.size(); ++row) {
+        // Use `const auto&` to safely access the `std::map`
+        const auto &details = allEmployees[row];
+        ui->tableWidget_employees->insertRow(static_cast<int>(row));
+
+        // Safely access elements in the const map using `find`
+        auto setTableItem = [&](int column, const std::string &key) {
+            auto it = details.find(key);
+            if (it != details.end()) {
+                ui->tableWidget_employees->setItem(static_cast<int>(row), column, new QTableWidgetItem(QString::fromStdString(it->second)));
+            } else {
+                ui->tableWidget_employees->setItem(static_cast<int>(row), column, new QTableWidgetItem(""));
+            }
+        };
+
+        // Fill columns based on the keys expected
+        setTableItem(0, "empId");
+        setTableItem(1, "name");
+        setTableItem(2, "dob");
+        setTableItem(3, "doj");
+        setTableItem(4, "mobileNo");
+        setTableItem(5, "state");
+        setTableItem(6, "city");
+        setTableItem(7, "department");
+        setTableItem(8, "grade_name");
+    }
+
+    // Adjust column sizes
+    std::cout << "Adjusting column sizes to fit content." << std::endl;
+    ui->tableWidget_employees->resizeColumnsToContents();
 }

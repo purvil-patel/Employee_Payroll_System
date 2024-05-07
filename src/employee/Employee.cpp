@@ -300,3 +300,34 @@ void Employee::handleAddEmployee()
     std::cin >> city;
     addEmployee(name, dob, doj, mobileNo, state, city, department, gradeName);
 }
+
+std::vector<std::map<std::string, std::string>> Employee::getAllEmployees() {
+    std::vector<std::map<std::string, std::string>> employees;
+    std::string sql = "SELECT empId, name, dob, doj, mobileNo, state, city, department, grade_name FROM employee";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error in prepare: " << sqlite3_errmsg(db) << std::endl;
+        return employees;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        std::map<std::string, std::string> employeeDetails;
+
+        // Fetch each column and store in the map
+        employeeDetails["empId"] = std::to_string(sqlite3_column_int(stmt, 0));
+        employeeDetails["name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        employeeDetails["dob"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        employeeDetails["doj"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+        employeeDetails["mobileNo"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
+        employeeDetails["state"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
+        employeeDetails["city"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+        employeeDetails["department"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
+        employeeDetails["grade_name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
+
+        employees.push_back(employeeDetails);
+    }
+
+    sqlite3_finalize(stmt);
+    return employees;
+}

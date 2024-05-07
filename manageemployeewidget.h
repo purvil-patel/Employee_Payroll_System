@@ -22,7 +22,7 @@ public:
 private slots:
     void on_pushButton_clicked();
     void on_addButton_clicked();
-
+    void on_pushButton_view_clicked();
 private:
     Ui::ManageEmployeeWidget *ui;
     sqlite3* db;
