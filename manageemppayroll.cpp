@@ -6,6 +6,7 @@ ManageEmpPayroll::ManageEmpPayroll(QWidget *parent)
     , ui(new Ui::ManageEmpPayroll)
 {
     ui->setupUi(this);
+
 }
 
 ManageEmpPayroll::~ManageEmpPayroll()
@@ -16,5 +17,11 @@ ManageEmpPayroll::~ManageEmpPayroll()
 void ManageEmpPayroll::on_pushButton_clicked()
 {
     emit backHome();
+}
+
+
+void ManageEmpPayroll::on_pushButton_2_clicked()
+{
+
 }
 
