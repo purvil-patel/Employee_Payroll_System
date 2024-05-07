@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sqlite3.h>
+#include <utility>
 
 class Department {
 private:
@@ -11,7 +12,7 @@ private:
 
 public:
     Department(sqlite3 *db);
-    void addDepartment();
+    std::pair<bool, std::string> addDepartment(const std::string name);
     std::vector<std::string> getAllDepartmentNames() const;
     bool departmentExists(const std::string& name);
 };
