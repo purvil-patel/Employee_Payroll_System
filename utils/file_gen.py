@@ -27,6 +27,6 @@ def consolidate_files(directory, output_file):
         print(f"All files have been consolidated into {output_file}")
 
 # Example usage
-directory_path = '/Users/spartan/EmployeePayrollSystem/src'  # Replace with your directory path
-output_filename = '/Users/spartan/EmployeePayrollSystem/utils/consolidated_files.txt'  # Name of the output file
+directory_path = '/Users/spartan/Employee_Payroll_System/src'  # Replace with your directory path
+output_filename = '/Users/spartan/Employee_Payroll_System/utils/consolidated_files.txt'  # Name of the output file
 consolidate_files(directory_path, output_filename)
