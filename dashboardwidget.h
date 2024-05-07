@@ -6,6 +6,7 @@
 #include "manageemployeewidget.h"
 #include "managepaygrade.h"
 #include "manageemppayroll.h"
+#include "generatereport.h"
 
 namespace Ui {
 class DashboardWidget;
@@ -33,12 +34,15 @@ private slots:
 
     void on_manageEmpPayrole_clicked();
 
+    void on_generateReport_clicked();
+
 private:
     Ui::DashboardWidget *ui;
     Departmentwidget departmentwidget;
     ManageEmployeeWidget manageempwidget;
     ManagePaygrade managePaygrade;
     ManageEmpPayroll manageEmpPayroll;
+    GenerateReport generateReport;
     int currentIndex;
 
 signals:
