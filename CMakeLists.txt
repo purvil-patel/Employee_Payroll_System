@@ -35,6 +35,8 @@ set(PROJECT_SOURCES
         managepaygrade.ui
         src/department/Department.h
         src/department/Department.cpp
+        src/pay_grade/PayGrade.h
+        src/pay_grade/PayGrade.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
