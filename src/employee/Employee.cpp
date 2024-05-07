@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <cctype>
 
-Employee::Employee(sqlite3 *db, Department *dept, PayGrade *payGrade) : db(db), dept(dept), payGrade(payGrade) {
+Employee::Employee(sqlite3 *db, Department *dept, PayGrade *payGrade) : db(db), dept(dept), payGrade(payGrade)
+{
     char *zErrMsg = 0;
     const char *sql = "CREATE TABLE IF NOT EXISTS employee ("
                       "empId INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -17,24 +18,30 @@ Employee::Employee(sqlite3 *db, Department *dept, PayGrade *payGrade) : db(db), 
                       "state TEXT, "
                       "city TEXT, "
                       "department TEXT, "
-                      "grade_name TEXT);";  
+                      "grade_name TEXT);";
     int rc = sqlite3_exec(db, sql, nullptr, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
+    if (rc != SQLITE_OK)
+    {
         std::cerr << "SQL error: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
-    } else {
+    }
+    else
+    {
         std::cout << "Table 'employee' checked/created successfully.\n";
     }
 }
 
-void Employee::addEmployee() {
+void Employee::addEmployee()
+{
     std::string name, dob, doj, mobileNo, state, city, department, gradeName;
 
     // Fetch and list departments
     std::vector<std::string> departments = dept->getAllDepartmentNames();
-    if (!departments.empty()) {
+    if (!departments.empty())
+    {
         std::cout << "Select Department:" << std::endl;
-        for (size_t i = 0; i < departments.size(); ++i) {
+        for (size_t i = 0; i < departments.size(); ++i)
+        {
             std::cout << i + 1 << ". " << departments[i] << std::endl;
         }
         int choice;
@@ -47,13 +54,16 @@ void Employee::addEmployee() {
     std::vector<PayGradeDetail> payGrades = payGrade->listPayGradesByDepartment(department);
     std::vector<std::string> gradeNames;
 
-    for (const auto& gradeDetail : payGrades) {
+    for (const auto &gradeDetail : payGrades)
+    {
         gradeNames.push_back(gradeDetail.grade_name);
     }
 
-    if (!payGrades.empty()) {
+    if (!payGrades.empty())
+    {
         std::cout << "Available Pay Grades for " << department << ":" << std::endl;
-        for (size_t i = 0; i < payGrades.size(); ++i) {
+        for (size_t i = 0; i < payGrades.size(); ++i)
+        {
             std::cout << i + 1 << ". " << payGrades[i].grade_name << std::endl;
         }
         int gradeChoice;
@@ -77,21 +87,23 @@ void Employee::addEmployee() {
     std::cin >> city;
 
     char *zErrMsg = 0;
-std::string sql = "INSERT INTO employee (name, dob, doj, mobileNo, state, city, department, grade_name) VALUES ('"
-                      + name + "', '" + dob + "', '" + doj + "', '" + mobileNo + "', '" 
-                      + state + "', '" + city + "', '" + department + "', '" + gradeName + "');";
+    std::string sql = "INSERT INTO employee (name, dob, doj, mobileNo, state, city, department, grade_name) VALUES ('" + name + "', '" + dob + "', '" + doj + "', '" + mobileNo + "', '" + state + "', '" + city + "', '" + department + "', '" + gradeName + "');";
     int rc = sqlite3_exec(db, sql.c_str(), 0, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
+    if (rc != SQLITE_OK)
+    {
         std::cerr << "SQL error: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
-    } else {
+    }
+    else
+    {
         std::cout << "Employee added successfully!\n";
     }
 }
 
 std::map<std::string, std::string> Employee::getEmployee(const std::string& name) {
     std::map<std::string, std::string> employeeDetails;
-    std::string sql = "SELECT name, dob, doj, mobileNo, state, city, department, grade_name FROM employee WHERE LOWER(name) = LOWER(?)";
+    // Include empId in the SELECT query
+    std::string sql = "SELECT empId, name, dob, doj, mobileNo, state, city, department, grade_name FROM employee WHERE LOWER(name) = LOWER(?)";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
@@ -102,17 +114,18 @@ std::map<std::string, std::string> Employee::getEmployee(const std::string& name
     sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
 
     if (sqlite3_step(stmt) == SQLITE_ROW) {
-        std::string gradeName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
-        employeeDetails["name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
-        employeeDetails["dob"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-        employeeDetails["doj"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-        employeeDetails["mobileNo"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
-        employeeDetails["state"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
-        employeeDetails["city"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
-        employeeDetails["department"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+        std::string gradeName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
+        employeeDetails["empId"] = std::to_string(sqlite3_column_int(stmt, 0));  // Get empId as integer and convert to string
+        employeeDetails["name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        employeeDetails["dob"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        employeeDetails["doj"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+        employeeDetails["mobileNo"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
+        employeeDetails["state"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
+        employeeDetails["city"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+        employeeDetails["department"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
         employeeDetails["grade_name"] = gradeName;
 
-        // Now fetch pay grade details
+        // Fetch pay grade details if available
         if (!gradeName.empty()) {
             sqlite3_stmt* pgStmt;
             std::string pgSql = "SELECT grade_basic, grade_da, grade_ta, grade_pf, grade_bonus FROM PayGrade WHERE grade_name = ?";
@@ -144,41 +157,100 @@ std::map<std::string, std::string> Employee::getEmployee(const std::string& name
     return employeeDetails;
 }
 
-void Employee::deleteEmployee(const std::string& name) {
-    // Check if the employee exists
-    if (!getEmployee(name).empty()) {
-        std::string sql = "DELETE FROM employee WHERE name = ?";
-        sqlite3_stmt* stmt;
 
-        if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
-            if (sqlite3_step(stmt) == SQLITE_DONE) {
-                std::cout << "Employee successfully deleted.\n";
-            } else {
-                std::cerr << "Failed to delete employee: " << sqlite3_errmsg(db) << std::endl;
-            }
-            sqlite3_finalize(stmt);
+void Employee::deleteEmployee(const std::string &empId) {
+    // Prepare the SQL DELETE statement using empId
+    std::string sql = "DELETE FROM employee WHERE empId = ?";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, empId.c_str(), -1, SQLITE_STATIC);
+        if (sqlite3_step(stmt) == SQLITE_DONE) {
+            std::cout << "Employee successfully deleted.\n";
         } else {
-            std::cerr << "SQL prepare error: " << sqlite3_errmsg(db) << std::endl;
+            std::cerr << "Failed to delete employee: " << sqlite3_errmsg(db) << std::endl;
         }
+        sqlite3_finalize(stmt);
     } else {
-        std::cout << "No employee found with the name: " << name << std::endl;
+        std::cerr << "SQL prepare error: " << sqlite3_errmsg(db) << std::endl;
     }
 }
 
+void Employee::updateEmployee(const std::string &empId, const std::string &name, const std::string &dob, const std::string &doj, const std::string &mobileNo, const std::string &state, const std::string &city, const std::string &department, const std::string &gradeName)
+{
+    // Construct the SQL update statement
+    std::string sql = "UPDATE employee SET name = ?, dob = ?, doj = ?, mobileNo = ?, state = ?, city = ?, department = ?, grade_name = ? WHERE empId = ?";
 
-void Employee::handleEmployeeQuery() {
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK)
+    {
+        // Binding the values to the statement
+        sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 2, dob.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 3, doj.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 4, mobileNo.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 5, state.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 6, city.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 7, department.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 8, gradeName.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 9, empId.c_str(), -1, SQLITE_TRANSIENT);
+
+        // Execute the update statement
+        if (sqlite3_step(stmt) == SQLITE_DONE)
+        {
+            std::cout << "Employee updated successfully.\n";
+        }
+        else
+        {
+            std::cerr << "Failed to update employee: " << sqlite3_errmsg(db) << std::endl;
+        }
+        sqlite3_finalize(stmt);
+    }
+    else
+    {
+        std::cerr << "SQL prepare error: " << sqlite3_errmsg(db) << std::endl;
+    }
+}
+
+void Employee::handleEmployeeQuery()
+{
     std::string employeeName;
-    std::cin.ignore(); 
+    std::cin.ignore();
     std::cout << "Enter Employee Name: ";
     std::getline(std::cin, employeeName);
     getEmployee(employeeName);
 }
 
 void Employee::handleDeleteEmployee() {
-    std::string employeeName;
-    std::cin.ignore(); 
-    std::cout << "Enter Employee Name: ";
-    std::getline(std::cin, employeeName);
-    deleteEmployee(employeeName);
+    std::string employeeId;
+    std::cin.ignore();
+    std::cout << "Enter Employee ID: ";
+    std::getline(std::cin, employeeId);
+    deleteEmployee(employeeId);
+}
+
+void Employee::handleUpdateEmployee()
+{
+
+    std::string empId, name, dob, doj, mobileNo, state, city, department, gradeName;
+    std::cout << "Enter ID: ";
+    std::cin >> empId;
+    std::cout << "Enter Name: ";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+    std::getline(std::cin, name);
+    std::cout << "Enter Date of Birth (YYYY-MM-DD): ";
+    std::cin >> dob;
+    std::cout << "Enter Date of Joining (YYYY-MM-DD): ";
+    std::cin >> doj;
+    std::cout << "Enter Mobile Number: ";
+    std::cin >> mobileNo;
+    std::cout << "Enter State: ";
+    std::cin >> state;
+    std::cout << "Enter City: ";
+    std::cin >> city;
+    std::cout << "Enter Department: ";
+    std::cin >> department;
+    std::cout << "Enter Grade Name: ";
+    std::cin >> gradeName;
+    updateEmployee(empId, name, dob, doj, mobileNo, state, city, department, gradeName);
 }

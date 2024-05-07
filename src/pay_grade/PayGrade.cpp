@@ -134,3 +134,57 @@ void PayGrade::handleDepartmentSelectionAndDisplay() {
         printPayGrades(payGrades);
     }
 }
+
+void PayGrade::collectUpdateInputs(std::string& gradeToUpdate, float& basic, float& da, float& ta, float& pf, float& bonus) {
+    std::cout << "Enter the name of the pay grade to update: ";
+    std::getline(std::cin >> std::ws, gradeToUpdate);
+
+    std::cout << "Enter new Basic Pay: "; std::cin >> basic; clearInputBuffer();
+    std::cout << "Enter new Dearness Allowance (DA): "; std::cin >> da; clearInputBuffer();
+    std::cout << "Enter new Travel Allowance (TA): "; std::cin >> ta; clearInputBuffer();
+    std::cout << "Enter new Provident Fund (PF): "; std::cin >> pf; clearInputBuffer();
+    std::cout << "Enter new Bonus: "; std::cin >> bonus; clearInputBuffer();
+}
+
+void PayGrade::updatePayGradeDetails(const std::string& gradeToUpdate, float basic, float da, float ta, float pf, float bonus) {
+    // Verify if the pay grade exists
+    std::string checkSql = "SELECT grade_name FROM PayGrade WHERE grade_name = ?";
+    sqlite3_stmt* checkStmt;
+    if (sqlite3_prepare_v2(db, checkSql.c_str(), -1, &checkStmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+    sqlite3_bind_text(checkStmt, 1, gradeToUpdate.c_str(), -1, SQLITE_STATIC);
+    
+    if (sqlite3_step(checkStmt) != SQLITE_ROW) {
+        std::cout << "Pay grade \"" << gradeToUpdate << "\" not found.\n";
+        sqlite3_finalize(checkStmt);
+        return;
+    }
+    sqlite3_finalize(checkStmt);
+
+    // Prepare the update statement
+    std::string sql = "UPDATE PayGrade SET grade_basic = ?, grade_da = ?, grade_ta = ?, grade_pf = ?, grade_bonus = ? WHERE grade_name = ?";
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    // Bind the new values to the statement
+    sqlite3_bind_double(stmt, 1, basic);
+    sqlite3_bind_double(stmt, 2, da);
+    sqlite3_bind_double(stmt, 3, ta);
+    sqlite3_bind_double(stmt, 4, pf);
+    sqlite3_bind_double(stmt, 5, bonus);
+    sqlite3_bind_text(stmt, 6, gradeToUpdate.c_str(), -1, SQLITE_STATIC);
+
+    // Execute the update statement
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(db) << std::endl;
+    } else {
+        std::cout << "Pay grade \"" << gradeToUpdate << "\" updated successfully.\n";
+    }
+
+    sqlite3_finalize(stmt);
+}
