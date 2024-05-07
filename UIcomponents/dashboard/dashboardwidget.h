@@ -4,7 +4,6 @@
 #include <QWidget>
 #include "departmentwidget.h"
 #include "manageemployeewidget.h"
-#include "managepaygrade.h"
 
 namespace Ui {
 class DashboardWidget;
@@ -28,13 +27,10 @@ private slots:
 
     void moveBackHome();
 
-    void on_managePaygrade_clicked();
-
 private:
     Ui::DashboardWidget *ui;
     Departmentwidget departmentwidget;
     ManageEmployeeWidget manageempwidget;
-    ManagePaygrade managePaygrade;
     int currentIndex;
 
 signals:

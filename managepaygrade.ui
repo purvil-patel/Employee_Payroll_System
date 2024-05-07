@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ManageEmployeeWidget</class>
- <widget class="QWidget" name="ManageEmployeeWidget">
+ <class>ManagePaygrade</class>
+ <widget class="QWidget" name="ManagePaygrade">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,21 +10,16 @@
     <height>766</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <bold>true</bold>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>90</y>
-     <width>291</width>
-     <height>61</height>
+     <x>250</x>
+     <y>80</y>
+     <width>231</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
@@ -34,7 +29,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Manage Employee</string>
+    <string>Manage Paygrade</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -43,15 +38,14 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>620</x>
-     <y>70</y>
+     <x>640</x>
+     <y>50</y>
      <width>100</width>
      <height>32</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>16</pointsize>
      <bold>true</bold>
     </font>
    </property>

@@ -30,6 +30,9 @@ set(PROJECT_SOURCES
         manageemployeewidget.h
         manageemployeewidget.cpp
         manageemployeewidget.ui
+        managepaygrade.h
+        managepaygrade.cpp
+        managepaygrade.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -39,6 +42,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         dashboardwidget.h dashboardwidget.cpp dashboardwidget.ui
         departmentwidget.h departmentwidget.cpp departmentwidget.ui
         manageemployeewidget.h manageemployeewidget.cpp manageemployeewidget.ui
+        managepaygrade.h managepaygrade.cpp managepaygrade.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Emp_payroll_sys APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
