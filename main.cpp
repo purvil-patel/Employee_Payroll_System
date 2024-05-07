@@ -65,8 +65,7 @@ int main() {
 
                     switch (subChoice) {
                         case 1:
-                            pg.inputGradeDetails();
-                            pg.saveToDatabase();
+                            pg.handleAddPaygrade();
                             break;
                         case 2: {
                             std::string gradeToUpdate;

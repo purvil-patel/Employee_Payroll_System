@@ -28,11 +28,15 @@ void clearInputBuffer() {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discards the buffer up to the newline character.
 }
 
-void PayGrade::inputGradeDetails() {
+void PayGrade::handleAddPaygrade() {
     Department dept(db);
     auto departments = dept.getAllDepartmentNames();
 
     clearInputBuffer();  // Clear buffer before reading department name
+
+    std::string department_name;
+    std::string grade_name;
+    float grade_basic, grade_da, grade_ta, grade_pf, grade_bonus;
 
     std::cout << "Select Department Name: ";
     std::getline(std::cin, department_name);
@@ -43,19 +47,26 @@ void PayGrade::inputGradeDetails() {
     std::cout << "Basic Pay: "; std::cin >> grade_basic; clearInputBuffer();
     std::cout << "Dearness Allowance (DA): "; std::cin >> grade_da; clearInputBuffer();
     std::cout << "Travel Allowance (TA): "; std::cin >> grade_ta; clearInputBuffer();
+    std::cout << "Provident Fund (PF): "; std::cin >> grade_pf; clearInputBuffer();
     std::cout << "Bonus: "; std::cin >> grade_bonus; clearInputBuffer();
+
+    // Pass the input data to the database function
+    addPaygradeToDatabase(department_name, grade_name, grade_basic, grade_da, grade_ta, grade_pf, grade_bonus);
 }
 
-void PayGrade::saveToDatabase() {
+void PayGrade::addPaygradeToDatabase(const std::string &department_name, const std::string &grade_name,
+                                     float grade_basic, float grade_da, float grade_ta, float grade_pf, float grade_bonus) {
     std::string sql = "INSERT INTO PayGrade (department_name, grade_name, grade_basic, grade_da, grade_ta, grade_pf, grade_bonus) VALUES ('"
                       + department_name + "', '" + grade_name + "', " + std::to_string(grade_basic) + ", "
                       + std::to_string(grade_da) + ", " + std::to_string(grade_ta) + ", " + std::to_string(grade_pf)
                       + ", " + std::to_string(grade_bonus) + ");";
-    char* errMsg = nullptr;
+    char *errMsg = nullptr;
     sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);
     if (errMsg) {
         std::cerr << "SQL error: " << errMsg << std::endl;
         sqlite3_free(errMsg);
+    } else {
+        std::cout << "Pay grade successfully added to the database.\n";
     }
 }
 

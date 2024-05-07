@@ -30,8 +30,9 @@ private:
 
 public:
     PayGrade(sqlite3* dbConnection);
-    void inputGradeDetails();
-    void saveToDatabase();
+    void handleAddPaygrade();
+    void addPaygradeToDatabase(const std::string &department_name, const std::string &grade_name,
+                           float grade_basic, float grade_da, float grade_ta, float grade_pf, float grade_bonus);
     std::vector<PayGradeDetail> listPayGradesByDepartment(const std::string& department);
     void printPayGrades(const std::vector<PayGradeDetail>& payGrades);
     void handleDepartmentSelectionAndDisplay();
