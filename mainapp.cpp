@@ -72,10 +72,10 @@ int main() {
                             float basic, da, ta, pf, bonus;
 
                             // Collect updated values from the user
-                            pg.collectUpdateInputs(gradeToUpdate, basic, da, ta, pf, bonus);
+                            pg.collectUpdateInputs(gradeToUpdate, basic, da, ta, bonus);
                             
                             // Update the specified pay grade
-                            pg.updatePayGradeDetails(gradeToUpdate, basic, da, ta, pf, bonus);
+                            pg.updatePayGradeDetails(gradeToUpdate, basic, da, ta, bonus);
                             break;
                         }
                         case 3:
