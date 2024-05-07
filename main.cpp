@@ -49,7 +49,7 @@ int main() {
 
             switch (choice) {
                 case 1:
-                    emp.addEmployee();
+                    emp.handleAddEmployee();
                     break;
                 case 2:
                     dept.addDepartment();
@@ -65,8 +65,7 @@ int main() {
 
                     switch (subChoice) {
                         case 1:
-                            pg.inputGradeDetails();
-                            pg.saveToDatabase();
+                            pg.handleAddPaygrade();
                             break;
                         case 2: {
                             std::string gradeToUpdate;
