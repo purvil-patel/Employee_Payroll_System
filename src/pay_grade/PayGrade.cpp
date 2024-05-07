@@ -199,3 +199,40 @@ void PayGrade::updatePayGradeDetails(const std::string& gradeToUpdate, float bas
 
     sqlite3_finalize(stmt);
 }
+
+// Collect grade name input from the user
+std::string PayGrade::collectGradeName() {
+    std::string gradeName;
+    std::cout << "Enter the name of the pay grade: ";
+    std::getline(std::cin >> std::ws, gradeName);
+    return gradeName;
+}
+
+PayGradeDetail PayGrade::getPayGradeDetailsByName(const std::string& grade_name) {
+    PayGradeDetail detail;
+    std::string sql = "SELECT department_name, grade_basic, grade_da, grade_ta, grade_pf, grade_bonus "
+                      "FROM PayGrade WHERE grade_name = ?";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(db) << std::endl;
+        return detail; // Return an empty structure if there is an error
+    }
+
+    sqlite3_bind_text(stmt, 1, grade_name.c_str(), -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        detail.department_name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        detail.grade_name = grade_name;
+        detail.basic_pay = sqlite3_column_double(stmt, 1);
+        detail.dearness_allowance = sqlite3_column_double(stmt, 2);
+        detail.travel_allowance = sqlite3_column_double(stmt, 3);
+        detail.provident_fund = sqlite3_column_double(stmt, 4);
+        detail.bonus = sqlite3_column_double(stmt, 5);
+    } else {
+        std::cerr << "Pay grade '" << grade_name << "' not found.\n";
+    }
+
+    sqlite3_finalize(stmt);
+    return detail;
+}
