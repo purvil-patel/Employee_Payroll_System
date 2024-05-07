@@ -35,6 +35,8 @@ public:
     std::vector<PayGradeDetail> listPayGradesByDepartment(const std::string& department);
     void printPayGrades(const std::vector<PayGradeDetail>& payGrades);
     void handleDepartmentSelectionAndDisplay();
+    void collectUpdateInputs(std::string& gradeToUpdate, float& basic, float& da, float& ta, float& pf, float& bonus);
+    void updatePayGradeDetails(const std::string& gradeToUpdate, float basic, float da, float ta, float pf, float bonus);
 };
 
 #endif // PAYGRADE_H

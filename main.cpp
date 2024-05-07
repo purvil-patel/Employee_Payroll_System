@@ -55,8 +55,36 @@ int main() {
                     dept.addDepartment();
                     break;
                 case 3:
-                    pg.inputGradeDetails();
-                    pg.saveToDatabase();
+                   int subChoice;
+                    std::cout << "\nPay Grade Management:\n";
+                    std::cout << "1. Add New Pay Grade\n";
+                    std::cout << "2. Update Existing Pay Grade\n";
+                    std::cout << "3. Go Back\n";
+                    std::cout << "Enter choice: ";
+                    std::cin >> subChoice;
+
+                    switch (subChoice) {
+                        case 1:
+                            pg.inputGradeDetails();
+                            pg.saveToDatabase();
+                            break;
+                        case 2: {
+                            std::string gradeToUpdate;
+                            float basic, da, ta, pf, bonus;
+
+                            // Collect updated values from the user
+                            pg.collectUpdateInputs(gradeToUpdate, basic, da, ta, pf, bonus);
+                            
+                            // Update the specified pay grade
+                            pg.updatePayGradeDetails(gradeToUpdate, basic, da, ta, pf, bonus);
+                            break;
+                        }
+                        case 3:
+                            break;
+                        default:
+                            std::cout << "Invalid option. Please try again.\n";
+                            break;
+                    }
                     break;
                 case 4:
                     pr.inputSalaryDetails(); 
