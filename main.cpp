@@ -49,7 +49,7 @@ int main() {
 
             switch (choice) {
                 case 1:
-                    emp.addEmployee();
+                    emp.handleAddEmployee();
                     break;
                 case 2:
                     dept.addDepartment();
