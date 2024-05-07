@@ -42,20 +42,48 @@ int main() {
             std::cout << "7. Get Employee Details\n"; 
             std::cout << "8. View Payroll Records\n";
             std::cout << "9. Delete Employee Details\n";
-            std::cout << "10. Exit\n";
+            std::cout << "10. Update Employee Details\n";
+            std::cout << "11. Exit\n";
             std::cout << "Enter choice: ";
             std::cin >> choice;
 
             switch (choice) {
                 case 1:
-                    emp.addEmployee();
+                    emp.handleAddEmployee();
                     break;
                 case 2:
                     dept.addDepartment();
                     break;
                 case 3:
-                    pg.inputGradeDetails();
-                    pg.saveToDatabase();
+                   int subChoice;
+                    std::cout << "\nPay Grade Management:\n";
+                    std::cout << "1. Add New Pay Grade\n";
+                    std::cout << "2. Update Existing Pay Grade\n";
+                    std::cout << "3. Go Back\n";
+                    std::cout << "Enter choice: ";
+                    std::cin >> subChoice;
+
+                    switch (subChoice) {
+                        case 1:
+                            pg.handleAddPaygrade();
+                            break;
+                        case 2: {
+                            std::string gradeToUpdate;
+                            float basic, da, ta, pf, bonus;
+
+                            // Collect updated values from the user
+                            pg.collectUpdateInputs(gradeToUpdate, basic, da, ta, pf, bonus);
+                            
+                            // Update the specified pay grade
+                            pg.updatePayGradeDetails(gradeToUpdate, basic, da, ta, pf, bonus);
+                            break;
+                        }
+                        case 3:
+                            break;
+                        default:
+                            std::cout << "Invalid option. Please try again.\n";
+                            break;
+                    }
                     break;
                 case 4:
                     pr.inputSalaryDetails(); 
@@ -90,7 +118,10 @@ int main() {
                 case 9: 
                     emp.handleDeleteEmployee();
                     break;
-                case 10:
+                case 10: 
+                    emp.handleUpdateEmployee();
+                    break;
+                case 11:
                     running = false;
                     break;
                 default:
