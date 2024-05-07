@@ -42,7 +42,8 @@ int main() {
             std::cout << "7. Get Employee Details\n"; 
             std::cout << "8. View Payroll Records\n";
             std::cout << "9. Delete Employee Details\n";
-            std::cout << "10. Exit\n";
+            std::cout << "10. Update Employee Details\n";
+            std::cout << "11. Exit\n";
             std::cout << "Enter choice: ";
             std::cin >> choice;
 
@@ -90,7 +91,10 @@ int main() {
                 case 9: 
                     emp.handleDeleteEmployee();
                     break;
-                case 10:
+                case 10: 
+                    emp.handleUpdateEmployee();
+                    break;
+                case 11:
                     running = false;
                     break;
                 default:
