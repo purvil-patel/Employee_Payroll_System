@@ -17,33 +17,32 @@ Department::Department(sqlite3 *db) : db(db) {
 }
 
 std::pair<bool, std::string> Department::addDepartment(const std::string name) {
-    //std::string name;
-    std::cout << "Enter Department Name: ";
-    //std::cin.ignore();
-    //std::getline(std::cin, name);  // Directly read the name
-
     if (departmentExists(name)) {
         std::cerr << "Error: Department name already exists.\n";
-        return {false ,"Error: Department name already exists."};
+        return {false, "Error: Department name already exists."};
     }
 
-    char *zErrMsg = 0;
     std::string sql = "INSERT INTO department (name) VALUES (?);";
     sqlite3_stmt *stmt;
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL) == SQLITE_OK) {
+
+    // Prepare the SQL statement
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        // Bind the department name to the statement
         sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
 
+        // Execute the statement
         if (sqlite3_step(stmt) == SQLITE_DONE) {
             std::cout << "Department added successfully!\n";
-            return {true,name + " Department added successfully!\n"};
+            sqlite3_finalize(stmt); // Finalize the statement
+            return {true, name + " department added successfully!"};
         } else {
             std::cerr << "SQL error in addDepartment: " << sqlite3_errmsg(db) << std::endl;
-            return {false,"Error in adding new department."};
+            sqlite3_finalize(stmt); // Finalize on error
+            return {false, "Error in adding the new department."};
         }
-        sqlite3_finalize(stmt);
     } else {
         std::cerr << "SQL error in addDepartment: " << sqlite3_errmsg(db) << std::endl;
-        return {false,"Error in adding new department."};
+        return {false, "Error in preparing SQL statement."};
     }
 }
 

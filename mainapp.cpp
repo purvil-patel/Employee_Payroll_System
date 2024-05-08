@@ -52,7 +52,10 @@ int main() {
                     emp.handleAddEmployee();
                     break;
                 case 2:
-                    dept.addDepartment();
+                    std::cout << "Enter Department Name: ";
+                    std::cin.ignore(); // Ignore any leftover newline characters
+                    std::getline(std::cin, departmentName);
+                    dept.addDepartment(departmentName);
                     break;
                 case 3:
                    int subChoice;
