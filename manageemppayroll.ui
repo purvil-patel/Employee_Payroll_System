@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>110</y>
+     <y>100</y>
      <width>291</width>
      <height>51</height>
     </rect>
@@ -46,6 +46,190 @@
    </property>
    <property name="text">
     <string>Home</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_add">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>160</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_view">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>160</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>View</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="formLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>310</y>
+     <width>361</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMaximumSize</enum>
+    </property>
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+    </property>
+    <property name="labelAlignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="formAlignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_month">
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Month</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QComboBox" name="comboBox_month">
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Jan</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Feb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Mar</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>April</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>May</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Jun</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Jul</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Aug</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Sep</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Oct</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Nov</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Dec</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_year">
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Year</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_date"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_date">
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Issue Date(MM-DD-YYYY)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_2"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="pushButton_submit">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>470</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Submit</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget_payroll">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>230</y>
+     <width>751</width>
+     <height>291</height>
+    </rect>
    </property>
   </widget>
  </widget>

@@ -39,6 +39,8 @@ set(PROJECT_SOURCES
         src/employee/Employee.cpp
         src/pay_grade/PayGrade.h
         src/pay_grade/PayGrade.cpp
+        src/payroll/Payroll.cpp
+        src/payroll/Payroll.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
