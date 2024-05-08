@@ -51,8 +51,8 @@
   <widget class="QPushButton" name="pushButton_add">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>210</y>
+     <x>200</x>
+     <y>160</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -64,8 +64,8 @@
   <widget class="QPushButton" name="pushButton_view">
    <property name="geometry">
     <rect>
-     <x>430</x>
-     <y>210</y>
+     <x>410</x>
+     <y>160</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -213,13 +213,23 @@
    <property name="geometry">
     <rect>
      <x>330</x>
-     <y>500</y>
+     <y>470</y>
      <width>111</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>Submit</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget_payroll">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>230</y>
+     <width>751</width>
+     <height>291</height>
+    </rect>
    </property>
   </widget>
  </widget>
