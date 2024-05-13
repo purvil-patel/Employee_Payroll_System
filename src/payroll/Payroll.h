@@ -18,7 +18,7 @@ struct PayrollDetail {
     std::string paygrade_name;
     std::string transaction_id;
     std::string salary_issue_date;
-    int salary_month;
+    std::string salary_month;
     int salary_year;
     float net_salary;
 };
@@ -27,7 +27,8 @@ class Payroll {
 private:
     sqlite3* db;
     std::vector<PayrollDetail> payrollDetails;
-    int salary_month, salary_year;
+    int salary_year;
+    std::string salary_month;
     std::string salary_issue_date;
     static std::atomic<int> sequence_number;  // Static atomic counter for transaction IDs
     std::string generateUniqueId(int emp_id);  // Method to generate unique transaction IDs
@@ -41,7 +42,7 @@ public:
     std::vector<PayrollDetail> getPayrollTable(const std::string& empName = "");
     void displayPayrollRecords(const std::string& empName = "");
     void handlePayrollQuery();
-    void setPayrollDetails(int year, int month, const std::string& issueDate);
+    void setPayrollDetails(int year, const std::string& month, const std::string& issueDate);
 };
 
 #endif

@@ -14,7 +14,7 @@ Payroll::Payroll(sqlite3* dbConnection) : db(dbConnection) {
         "paygrade_name TEXT, "
         "transaction_id TEXT PRIMARY KEY, "
         "salary_issue_date TEXT, "
-        "salary_month INTEGER, "
+        "salary_month TEXT, "  // Changed from INTEGER to TEXT to accommodate month names
         "salary_year INTEGER, "
         "emp_net_salary REAL, "
         "FOREIGN KEY(emp_id) REFERENCES employee(empId));"; // Assuming employee table has empId
@@ -23,6 +23,8 @@ Payroll::Payroll(sqlite3* dbConnection) : db(dbConnection) {
     if (sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg) != SQLITE_OK) {
         std::cerr << "Error creating Payroll table: " << errMsg << std::endl;
         sqlite3_free(errMsg);
+    } else {
+        std::cout << "Payroll table created or already exists." << std::endl;
     }
 }
 
@@ -66,6 +68,12 @@ void Payroll::generatePayroll() {
             detail.salary_year = salary_year;
             calculateNetSalary(detail, detail.paygrade_name);
 
+            std::cout << "Generated Payroll for: " << detail.emp_name
+                      << ", Month: " << detail.salary_month
+                      << ", Year: " << detail.salary_year
+                      << ", Issue Date: " << detail.salary_issue_date
+                      << ", Net Salary: " << detail.net_salary << std::endl;
+
             // Push back to vector and later insert into the database
             payrollDetails.push_back(detail);
         }
@@ -95,7 +103,7 @@ void Payroll::calculateNetSalary(PayrollDetail &detail, const std::string& payGr
     }
 }
 
-void Payroll::setPayrollDetails(int year, int month, const std::string& issueDate) {
+void Payroll::setPayrollDetails(int year, const std::string& month, const std::string& issueDate) {
     this->salary_year = year;
     this->salary_month = month;
     this->salary_issue_date = issueDate;
@@ -104,10 +112,11 @@ void Payroll::setPayrollDetails(int year, int month, const std::string& issueDat
 void Payroll::saveToDatabase() {
     for (const auto& detail : payrollDetails) {
         std::string sql = "INSERT INTO Payroll (emp_id, emp_name, department_name, paygrade_name, transaction_id, salary_issue_date, salary_month, salary_year, emp_net_salary) VALUES ("
-                          + std::to_string(detail.emp_id) + ", '" + detail.emp_name + "', '" + detail.department_name + "', '" 
-                          + detail.paygrade_name + "', '" + detail.transaction_id + "', '" + detail.salary_issue_date + "', " 
-                          + std::to_string(detail.salary_month) + ", " + std::to_string(detail.salary_year) + ", " 
-                          + std::to_string(detail.net_salary) + ");";
+        + std::to_string(detail.emp_id) + ", '" + detail.emp_name + "', '" + detail.department_name + "', '" 
+        + detail.paygrade_name + "', '" + detail.transaction_id + "', '" + detail.salary_issue_date + "', '" 
+        + detail.salary_month + "', "  // Correctly handling month as a string within quotes
+        + std::to_string(detail.salary_year) + ", " 
+        + std::to_string(detail.net_salary) + ");";
         char *errMsg = nullptr;
         if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
             std::cerr << "SQL error during insert: " << errMsg << std::endl;
@@ -117,8 +126,6 @@ void Payroll::saveToDatabase() {
         }
     }
 }
-
-#include "Payroll.h"
 
 std::vector<PayrollDetail> Payroll::getPayrollTable(const std::string& empName) {
     std::vector<PayrollDetail> payrollDetails;  // This will store the fetched payroll records
