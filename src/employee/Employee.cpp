@@ -117,15 +117,14 @@ std::map<std::string, std::string> Employee::getEmployee(const std::string& name
         // Fetch pay grade details if available
         if (!gradeName.empty()) {
             sqlite3_stmt* pgStmt;
-            std::string pgSql = "SELECT grade_basic, grade_da, grade_ta, grade_pf, grade_bonus FROM PayGrade WHERE grade_name = ?";
+            std::string pgSql = "SELECT grade_basic, grade_da, grade_ta, grade_bonus FROM PayGrade WHERE grade_name = ?";
             if (sqlite3_prepare_v2(db, pgSql.c_str(), -1, &pgStmt, nullptr) == SQLITE_OK) {
                 sqlite3_bind_text(pgStmt, 1, gradeName.c_str(), -1, SQLITE_STATIC);
                 if (sqlite3_step(pgStmt) == SQLITE_ROW) {
                     employeeDetails["grade_basic"] = std::to_string(sqlite3_column_double(pgStmt, 0));
                     employeeDetails["grade_da"] = std::to_string(sqlite3_column_double(pgStmt, 1));
                     employeeDetails["grade_ta"] = std::to_string(sqlite3_column_double(pgStmt, 2));
-                    employeeDetails["grade_pf"] = std::to_string(sqlite3_column_double(pgStmt, 3));
-                    employeeDetails["grade_bonus"] = std::to_string(sqlite3_column_double(pgStmt, 4));
+                    employeeDetails["grade_bonus"] = std::to_string(sqlite3_column_double(pgStmt, 3));
                 }
                 sqlite3_finalize(pgStmt);
             } else {

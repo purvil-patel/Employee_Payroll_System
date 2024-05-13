@@ -64,6 +64,7 @@ void ManageEmpPayroll::on_pushButton_add_clicked()
     ui->label_date->setVisible(true);
 
     ui->pushButton_submit->setVisible(true);
+    ui->tableWidget_payroll->setVisible(false);
 }
 
 void ManageEmpPayroll::on_pushButton_submit_clicked()
