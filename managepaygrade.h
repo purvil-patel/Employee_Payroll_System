@@ -26,6 +26,11 @@ private slots:
     // void on_pushButton_update_clicked();
     void on_pushButton_view_clicked();
 
+    void on_pushButton_update_clicked();
+    void on_pushButton_update_fetch_clicked();
+    void on_pushButton_update_submit_clicked();
+
+
 signals:
     void backHome();
 
