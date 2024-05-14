@@ -44,17 +44,24 @@ ManageEmployeeWidget::ManageEmployeeWidget(QWidget *parent)
     ui->label_10->setVisible(false);
     ui->tableWidget_employees->setVisible(false);
 
+    ui->pushButton_4->setVisible(false);
+    ui->label_4->setVisible(false);
+    ui->lineEdit_3->setVisible(false);
+
+    ui->pushButton_6->setVisible(false);
+
     // Connect the Add button's clicked signal to the slot
     connect(ui->pushButton_2, &QPushButton::clicked, this, &ManageEmployeeWidget::on_addButton_clicked);
 
     //connect(ui->comboBox, &QComboBox::highlighted, this, &ManageEmployeeWidget::updateDepartmentComboBox);
     //connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(updatePayGradeComboBox(QString)));
     connect(ui->comboBox, &QComboBox::currentTextChanged, this, &ManageEmployeeWidget::updatePayGradeComboBox);
-
     connect(ui->pushButton_3, &QPushButton::clicked, this, &ManageEmployeeWidget::addEmployee);
     connect(ui->pushButton_view, &QPushButton::clicked, this, &ManageEmployeeWidget::on_pushButton_view_clicked);
-
     connect(ui->pushButton_Delete, &QPushButton::clicked, this, &ManageEmployeeWidget::onDeleteButtonClicked);
+    connect(ui->pushButton_5, &QPushButton::clicked, this, &ManageEmployeeWidget::on_pushButton_update_clicked);
+    connect(ui->pushButton_4, &QPushButton::clicked, this, &ManageEmployeeWidget::on_pushButton_update_fetch_clicked);
+    connect(ui->pushButton_6, &QPushButton::clicked, this, &ManageEmployeeWidget::on_pushButton_update_submit_clicked);
 }
 
 ManageEmployeeWidget::~ManageEmployeeWidget()
@@ -68,6 +75,132 @@ void ManageEmployeeWidget::updateDepartmentComboBox() {
     for (const std::string &name : departments) {
         ui->comboBox->addItem(QString::fromStdString(name));
     }
+}
+
+void ManageEmployeeWidget::on_pushButton_update_clicked()
+{
+
+    ui->lineEdit->setVisible(false);
+    ui->lineEdit_2->setVisible(false);
+    ui->lineEdit_5->setVisible(false);
+    ui->lineEdit_6->setVisible(false);
+    ui->lineEdit_7->setVisible(false);
+    ui->lineEdit_8->setVisible(false);
+    ui->comboBox->setVisible(false);
+    ui->comboBox_2->setVisible(false);
+    ui->pushButton_3->setVisible(false);
+    // Hiding the labels
+    ui->label_2->setVisible(false);
+    ui->label_3->setVisible(false);
+    ui->label_5->setVisible(false);
+    ui->label_6->setVisible(false);
+    ui->label_7->setVisible(false);
+    ui->label_8->setVisible(false);
+    ui->label_9->setVisible(false);
+    ui->label_10->setVisible(false);
+    ui->tableWidget_employees->setVisible(false);
+    ui->pushButton_4->setVisible(true);
+    ui->label_4->setVisible(true);
+    ui->lineEdit_3->setVisible(true);
+    ui->pushButton_6->setVisible(false);
+}
+
+void ManageEmployeeWidget::on_pushButton_update_fetch_clicked() {
+
+    std::string empId = ui->lineEdit_3->text().toStdString();
+
+    // Fetch the employee details
+    std::map<std::string, std::string> details = employee->getEmployee(empId);
+
+    // Check if the employee was found and update the UI accordingly
+    if (!details.empty()) {
+        // Set UI elements with fetched employee details
+        ui->lineEdit->setText(QString::fromStdString(details["name"]));
+        ui->lineEdit_2->setText(QString::fromStdString(details["state"]));
+        ui->lineEdit_6->setText(QString::fromStdString(details["dob"]));
+        ui->lineEdit_7->setText(QString::fromStdString(details["mobileNo"]));
+        ui->lineEdit_5->setText(QString::fromStdString(details["doj"]));
+        ui->lineEdit_8->setText(QString::fromStdString(details["city"]));
+        ui->comboBox->setCurrentText(QString::fromStdString(details["department"]));
+        ui->comboBox_2->setCurrentText(QString::fromStdString(details["grade_name"]));
+
+        ui->lineEdit->setVisible(true);
+        ui->lineEdit_2->setVisible(true);
+        ui->lineEdit_5->setVisible(true);
+        ui->lineEdit_6->setVisible(true);
+        ui->lineEdit_7->setVisible(true);
+        ui->lineEdit_8->setVisible(true);
+        ui->comboBox->setVisible(true);
+        ui->comboBox_2->setVisible(true);
+        ui->pushButton_3->setVisible(false);
+        // Toggling the labels' visibility
+        ui->label_2->setVisible(true);
+        ui->label_3->setVisible(true);
+        ui->label_5->setVisible(true);
+        ui->label_6->setVisible(true);
+        ui->label_7->setVisible(true);
+        ui->label_8->setVisible(true);
+        ui->label_9->setVisible(true);
+        ui->label_10->setVisible(true);
+        ui->pushButton_6->setVisible(true);
+        ui->label_4->setVisible(false);
+        ui->lineEdit_3->setVisible(false);
+
+
+        // Enable the submit button
+        ui->pushButton_4->setVisible(false);
+    } else {
+        QMessageBox::warning(this, "Not Found", "Employee not found. Please check the ID and try again.");
+    }
+}
+
+void ManageEmployeeWidget::on_pushButton_update_submit_clicked() {
+    // std::string gradeName = ui->lineEdit_name->text().toStdString();
+    std::string empId = ui->lineEdit_3->text().toStdString();
+    // float basic = ui->lineEdit_basic->text().toFloat();
+    // float da = ui->lineEdit_DA->text().toFloat();
+    // float ta = ui->lineEdit_TA->text().toFloat();
+    // float bonus = ui->lineEdit_bonus->text().toFloat();
+
+    QString name = ui->lineEdit->text();
+    QString dob = ui->lineEdit_6->text();
+    QString doj = ui->lineEdit_5->text();
+    QString mobileNo = ui->lineEdit_7->text();
+    QString state = ui->lineEdit_2->text();
+    QString city = ui->lineEdit_8->text();
+    QString department = ui->comboBox->currentText();
+    QString gradeName = ui->comboBox_2->currentText();
+
+    // Call the backend function to update the paygrade
+    // employee->updateEmployee(gradeName, basic, da, ta, bonus);
+
+    // Call the backend function to add an employee
+    if (!name.isEmpty() && !dob.isEmpty() && !doj.isEmpty()) { // Minimal validation example
+        bool result = employee->updateEmployee(empId,name.toStdString(), dob.toStdString(), doj.toStdString(),
+                                            mobileNo.toStdString(), state.toStdString(), city.toStdString(),
+                                            department.toStdString(), gradeName.toStdString());
+
+        if(result){
+            QMessageBox::information(this, "Success", "Record Updated!!");
+        }else{
+            QMessageBox::warning(this, "Failure", "Error Occured!!!");
+        }
+
+
+    } else {
+        // Handle the error case or invalid input
+        QMessageBox::warning(this, "Input Error", "Please fill in all required fields.");
+    }
+
+    ui->lineEdit->clear();
+    ui->lineEdit_6->clear();
+    ui->lineEdit_5->clear();
+    ui->lineEdit_7->clear();
+    ui->lineEdit_2->clear();
+    ui->lineEdit_8->clear();
+    ui->comboBox->currentText();
+    ui->comboBox_2->currentText();
+
 }
 
 void ManageEmployeeWidget::onDeleteButtonClicked()
@@ -173,6 +306,10 @@ void ManageEmployeeWidget::on_pushButton_clicked()
     ui->label_8->setVisible(false);
     ui->label_9->setVisible(false);
     ui->label_10->setVisible(false);
+    ui->pushButton_6->setVisible(false);
+    ui->pushButton_4->setVisible(false);
+    ui->label_4->setVisible(false);
+    ui->lineEdit_3->setVisible(false);
     emit backHome();
 }
 
@@ -199,6 +336,11 @@ void ManageEmployeeWidget::on_addButton_clicked()
     ui->label_8->setVisible(true);
     ui->label_9->setVisible(true);
     ui->label_10->setVisible(true);
+    ui->pushButton_4->setVisible(false);
+    ui->label_4->setVisible(false);
+    ui->lineEdit_3->setVisible(false);
+    ui->pushButton_6->setVisible(false);
+
     if(ui->comboBox->isVisible()){
         updateDepartmentComboBox();
 
@@ -226,6 +368,10 @@ void ManageEmployeeWidget::on_pushButton_view_clicked() {
     ui->label_8->setVisible(false);
     ui->label_9->setVisible(false);
     ui->label_10->setVisible(false);
+    ui->pushButton_4->setVisible(false);
+    ui->label_4->setVisible(false);
+    ui->lineEdit_3->setVisible(false);
+    ui->pushButton_6->setVisible(false);
     ui->tableWidget_employees->setVisible(true);
     // std::cout << "View button clicked for Employee!" << std::endl;
 
