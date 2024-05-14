@@ -2,6 +2,7 @@
 #include "ui_manageemployeewidget.h"
 #include "src/database/Database.h"
 #include <QMessageBox>
+#include <QInputDialog>
 #include <iostream>
 
 ManageEmployeeWidget::ManageEmployeeWidget(QWidget *parent)
@@ -53,6 +54,7 @@ ManageEmployeeWidget::ManageEmployeeWidget(QWidget *parent)
     connect(ui->pushButton_3, &QPushButton::clicked, this, &ManageEmployeeWidget::addEmployee);
     connect(ui->pushButton_view, &QPushButton::clicked, this, &ManageEmployeeWidget::on_pushButton_view_clicked);
 
+    connect(ui->pushButton_Delete, &QPushButton::clicked, this, &ManageEmployeeWidget::onDeleteButtonClicked);
 }
 
 ManageEmployeeWidget::~ManageEmployeeWidget()
@@ -68,27 +70,27 @@ void ManageEmployeeWidget::updateDepartmentComboBox() {
     }
 }
 
-// Dummy Implementation for testing
+void ManageEmployeeWidget::onDeleteButtonClicked()
+{
+    // Open a dialog to get employee ID input
+    bool ok;
+    QString text = QInputDialog::getText(this, tr("Delete Employee"),
+                                         tr("Enter Employee ID:"), QLineEdit::Normal,
+                                         "", &ok);
+    if (ok && !text.isEmpty()) {
+        // Call deleteEmployee() function with the employee ID
+        std::string employeeId = text.toStdString();
+        bool deletionSuccess = employee->deleteEmployee(employeeId);
 
-// void ManageEmployeeWidget::updatePayGradeComboBox(const QString &departmentName) {
-//     ui->comboBox_2->clear(); // Clear existing items
-
-//     // Hardcoded grade names for testing the dropdown functionality
-//     std::vector<std::string> gradeNames = {
-//         "Junior Developer",
-//         "Senior Developer",
-//         "Project Manager",
-//         "Quality Assurance",
-//         "User Experience Designer"
-//     };
-
-//     // Populate the ComboBox with hardcoded grade names
-//     for (const std::string &name : gradeNames) {
-//         ui->comboBox_2->addItem(QString::fromStdString(name));
-//     }
-// }
-
-// Actual Implementation
+        // Show message box to inform user if deletion was successful
+        if (deletionSuccess) {
+            on_pushButton_view_clicked();
+            QMessageBox::information(this, tr("Employee Deleted"), tr("Employee has been deleted."));
+        } else {
+            QMessageBox::critical(this, tr("Error"), tr("Employee with ID %1 does not exist.").arg(text));
+        }
+    }
+}
 
 void ManageEmployeeWidget::updatePayGradeComboBox(const QString &departmentName) {
     ui->comboBox_2->clear(); // Clear existing items
@@ -97,21 +99,11 @@ void ManageEmployeeWidget::updatePayGradeComboBox(const QString &departmentName)
     std::vector<PayGradeDetail> payGrades = payGrade->listPayGradesByDepartment(departmentName.toStdString());
     std::vector<std::string> gradeNames;
 
-    // gradeNames = {
-    //     "Junior Developer",
-    //     "Senior Developer",
-    //     "Project Manager",
-    //     "Quality Assurance",
-    //     "User Experience Designer"
-    // };
-
     // Extract just the names from the PayGradeDetail structures
     for (const auto &gradeDetail : payGrades) {
         gradeNames.push_back(gradeDetail.grade_name);
         std::cout<<"EEEEEEEEE"<<gradeDetail.grade_name;
     }
-
-
 
     // Populate the ComboBox with grade names
     for (const std::string &name : gradeNames) {

@@ -19,7 +19,7 @@ public:
     bool addEmployee(const std::string& name, const std::string& dob, const std::string& doj, const std::string& mobileNo, const std::string& state, const std::string& city, const std::string& department, const std::string& gradeName);
     std::map<std::string, std::string> getEmployee(const std::string& name);
     void handleEmployeeQuery(); 
-    void deleteEmployee(const std::string& name);
+    bool deleteEmployee(const std::string& name);
     void handleDeleteEmployee();
     void updateEmployee(const std::string& empId, const std::string& name, const std::string& dob, const std::string& doj, const std::string& mobileNo, const std::string& state, const std::string& city, const std::string& department, const std::string& gradeName);
     void handleUpdateEmployee();

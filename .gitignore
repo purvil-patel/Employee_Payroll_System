@@ -1,5 +1,6 @@
 build
 utils/consolidated_files.txt
+CMakeLists.txt
 CMakeLists.txt.user
 app
 *.db
