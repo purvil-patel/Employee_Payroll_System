@@ -8,8 +8,8 @@
 ManageEmpPayroll::ManageEmpPayroll(QWidget *parent)
     : QWidget(parent), ui(new Ui::ManageEmpPayroll), payrollHandler(std::make_unique<Payroll>(Database::getInstance().getConn())) {
     ui->setupUi(this);
-    ui->tableWidget_payroll->setColumnCount(6);
-    QStringList headers = {"Employee ID", "Employee Name", "Department", "Pay Grade", "Salary Date", "Net Salary"};
+    ui->tableWidget_payroll->setColumnCount(8);  // Ensure you have 8 columns
+    QStringList headers = {"Employee ID", "Employee Name", "Department", "Pay Grade", "Net Salary", "Salary Month", "Salary Year", "Salary Date"};
     ui->tableWidget_payroll->setHorizontalHeaderLabels(headers);
     ui->tableWidget_payroll->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget_payroll->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -64,12 +64,13 @@ void ManageEmpPayroll::on_pushButton_add_clicked()
     ui->label_date->setVisible(true);
 
     ui->pushButton_submit->setVisible(true);
+    ui->tableWidget_payroll->setVisible(false);
 }
 
 void ManageEmpPayroll::on_pushButton_submit_clicked()
 {
     // Retrieve data from the UI
-    int month = ui->comboBox_month->currentIndex() + 1; // Assuming Jan is index 0
+    int month = ui->comboBox_month->currentIndex(); // Assuming Jan is index 0
     QString yearStr = ui->lineEdit_date->text();
     QString issueDate = ui->lineEdit_2->text();
 
@@ -134,8 +135,10 @@ void ManageEmpPayroll::on_pushButton_view_clicked() {
             ui->tableWidget_payroll->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(record.emp_name)));
             ui->tableWidget_payroll->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(record.department_name)));
             ui->tableWidget_payroll->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(record.paygrade_name)));
-            ui->tableWidget_payroll->setItem(row, 4, new QTableWidgetItem(QString::fromStdString(record.salary_issue_date)));
-            ui->tableWidget_payroll->setItem(row, 5, new QTableWidgetItem(QString::number(record.net_salary)));
+            ui->tableWidget_payroll->setItem(row, 4, new QTableWidgetItem(QString::number(record.net_salary)));
+            ui->tableWidget_payroll->setItem(row, 5, new QTableWidgetItem(QString::number(record.salary_month)));
+            ui->tableWidget_payroll->setItem(row, 6, new QTableWidgetItem(QString::number(record.salary_year)));
+            ui->tableWidget_payroll->setItem(row, 7, new QTableWidgetItem(QString::fromStdString(record.salary_issue_date)));
         }
         ui->tableWidget_payroll->resizeColumnsToContents();  // Adjust column sizes
     }

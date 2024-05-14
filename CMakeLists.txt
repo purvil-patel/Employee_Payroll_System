@@ -41,6 +41,9 @@ set(PROJECT_SOURCES
         src/pay_grade/PayGrade.cpp
         src/payroll/Payroll.cpp
         src/payroll/Payroll.h
+        generatereport.h
+        generatereport.cpp
+        generatereport.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

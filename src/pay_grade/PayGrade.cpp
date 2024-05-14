@@ -217,7 +217,7 @@ std::string PayGrade::collectGradeName() {
 
 PayGradeDetail PayGrade::getPayGradeDetailsByName(const std::string& grade_name) {
     PayGradeDetail detail;
-    std::string sql = "SELECT department_name, grade_basic, grade_da, grade_ta, grade_pf, grade_bonus "
+    std::string sql = "SELECT department_name, grade_basic, grade_da, grade_ta, grade_bonus "
                       "FROM PayGrade WHERE grade_name = ?";
     sqlite3_stmt* stmt;
 
@@ -234,7 +234,7 @@ PayGradeDetail PayGrade::getPayGradeDetailsByName(const std::string& grade_name)
         detail.basic_pay = sqlite3_column_double(stmt, 1);
         detail.dearness_allowance = sqlite3_column_double(stmt, 2);
         detail.travel_allowance = sqlite3_column_double(stmt, 3);
-        detail.bonus = sqlite3_column_double(stmt, 5);
+        detail.bonus = sqlite3_column_double(stmt, 4);
     } else {
         std::cerr << "Pay grade '" << grade_name << "' not found.\n";
     }

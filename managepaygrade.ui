@@ -179,11 +179,16 @@
   <widget class="QLabel" name="label_grade">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>50</x>
      <y>290</y>
      <width>100</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>Grade Name</string>
@@ -192,11 +197,16 @@
   <widget class="QLabel" name="label_basic">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>50</x>
      <y>340</y>
      <width>100</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>Basic</string>
@@ -211,6 +221,11 @@
      <height>16</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>DA</string>
    </property>
@@ -218,11 +233,16 @@
   <widget class="QLabel" name="label_Department">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>50</x>
      <y>240</y>
      <width>100</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>Department</string>
@@ -237,6 +257,11 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>Bonus</string>
    </property>
@@ -249,6 +274,11 @@
      <width>49</width>
      <height>16</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>TA</string>
@@ -267,8 +297,8 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>400</y>
+     <x>160</x>
+     <y>390</y>
      <width>200</width>
      <height>40</height>
     </rect>
@@ -280,11 +310,37 @@
   <widget class="QTableWidget" name="tableWidget_paygrades">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>220</y>
+     <x>30</x>
+     <y>230</y>
      <width>731</width>
      <height>311</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_update_submit">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>480</y>
+     <width>200</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Update</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_update_fetch">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>390</y>
+     <width>241</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Update paygrade</string>
    </property>
   </widget>
  </widget>
