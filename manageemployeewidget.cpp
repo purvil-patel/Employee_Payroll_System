@@ -201,14 +201,67 @@ void ManageEmployeeWidget::on_pushButton_update_submit_clicked() {
     ui->comboBox->currentText();
     ui->comboBox_2->currentText();
 
+    ui->lineEdit->setVisible(false);
+    ui->lineEdit_2->setVisible(false);
+    ui->lineEdit_5->setVisible(false);
+    ui->lineEdit_6->setVisible(false);
+    ui->lineEdit_7->setVisible(false);
+    ui->lineEdit_8->setVisible(false);
+    ui->comboBox->setVisible(false);
+    ui->comboBox_2->setVisible(false);
+    ui->pushButton_3->setVisible(false);
+    // Hiding the labels
+    ui->label_2->setVisible(false);
+    ui->label_3->setVisible(false);
+    ui->label_5->setVisible(false);
+    ui->label_6->setVisible(false);
+    ui->label_7->setVisible(false);
+    ui->label_8->setVisible(false);
+    ui->label_9->setVisible(false);
+    ui->label_10->setVisible(false);
+    ui->tableWidget_employees->setVisible(false);
+    ui->pushButton_4->setVisible(true);
+    ui->label_4->setVisible(true);
+    ui->lineEdit_3->setVisible(true);
+    ui->pushButton_6->setVisible(false);
+    ui->lineEdit_3->clear();
+
 }
 
 void ManageEmployeeWidget::onDeleteButtonClicked()
 {
+    ui->lineEdit->setVisible(false);
+    ui->lineEdit_2->setVisible(false);
+    ui->lineEdit_5->setVisible(false);
+    ui->lineEdit_6->setVisible(false);
+    ui->lineEdit_7->setVisible(false);
+    ui->lineEdit_8->setVisible(false);
+    ui->comboBox->setVisible(false);
+    ui->comboBox_2->setVisible(false);
+    ui->pushButton_3->setVisible(false);
+    // Hiding the labels
+    ui->label_2->setVisible(false);
+    ui->label_3->setVisible(false);
+    ui->label_5->setVisible(false);
+    ui->label_6->setVisible(false);
+    ui->label_7->setVisible(false);
+    ui->label_8->setVisible(false);
+    ui->label_9->setVisible(false);
+    ui->label_10->setVisible(false);
+    ui->tableWidget_employees->setVisible(false);
+    ui->pushButton_4->setVisible(false);
+    ui->label_4->setVisible(false);
+    ui->lineEdit_3->setVisible(false);
+    ui->pushButton_6->setVisible(false);
+    ui->tableWidget_employees->setVisible(false);
+    ui->label_4->setVisible(false);
+    ui->lineEdit_3->setVisible(false);
+    ui->pushButton_4->setVisible(false);
     // Open a dialog to get employee ID input
+
     bool ok;
     QString text = QInputDialog::getText(this, tr("Delete Employee"),
-                                         tr("Enter Employee ID:"), QLineEdit::Normal,
+                                         tr("Enter Employee ID(Refer View):"), QLineEdit::Normal,
                                          "", &ok);
     if (ok && !text.isEmpty()) {
         // Call deleteEmployee() function with the employee ID
