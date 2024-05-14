@@ -110,7 +110,7 @@ void ManageEmployeeWidget::on_pushButton_update_fetch_clicked() {
     std::string empId = ui->lineEdit_3->text().toStdString();
 
     // Fetch the employee details
-    std::map<std::string, std::string> details = employee->getEmployee(empId);
+    std::map<std::string, std::string> details = employee->getEmployeeById(empId);
 
     // Check if the employee was found and update the UI accordingly
     if (!details.empty()) {

@@ -89,7 +89,7 @@ bool Employee::addEmployee(const std::string& name, const std::string& dob, cons
 }
 
 
-std::map<std::string, std::string> Employee::getEmployee(const std::string& empId) {
+std::map<std::string, std::string> Employee::getEmployeeById(const std::string& empId) {
     std::map<std::string, std::string> employeeDetails;
     // Include empId in the SELECT query
     std::string sql = "SELECT empId, name, dob, doj, mobileNo, state, city, department, grade_name FROM employee WHERE empId = ?";
@@ -139,6 +139,64 @@ std::map<std::string, std::string> Employee::getEmployee(const std::string& empI
         }
     } else {
         std::cout << "No employee found with the empId: " << empId << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
+    return employeeDetails;
+}
+
+
+
+std::map<std::string, std::string> Employee::getEmployee(const std::string& name) {
+    std::map<std::string, std::string> employeeDetails;
+    // Include empId in the SELECT query
+    std::string sql = "SELECT empId, name, dob, doj, mobileNo, state, city, department, grade_name FROM employee WHERE LOWER(name) = LOWER(?)";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error in prepare: " << sqlite3_errmsg(db) << std::endl;
+        return employeeDetails;
+    }
+
+    sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        std::string gradeName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
+        employeeDetails["empId"] = std::to_string(sqlite3_column_int(stmt, 0));  // Get empId as integer and convert to string
+        employeeDetails["name"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        employeeDetails["dob"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        employeeDetails["doj"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+        employeeDetails["mobileNo"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
+        employeeDetails["state"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
+        employeeDetails["city"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+        employeeDetails["department"] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
+        employeeDetails["grade_name"] = gradeName;
+
+        // Fetch pay grade details if available
+        if (!gradeName.empty()) {
+            sqlite3_stmt* pgStmt;
+            std::string pgSql = "SELECT grade_basic, grade_da, grade_ta, grade_bonus FROM PayGrade WHERE grade_name = ?";
+            if (sqlite3_prepare_v2(db, pgSql.c_str(), -1, &pgStmt, nullptr) == SQLITE_OK) {
+                sqlite3_bind_text(pgStmt, 1, gradeName.c_str(), -1, SQLITE_STATIC);
+                if (sqlite3_step(pgStmt) == SQLITE_ROW) {
+                    employeeDetails["grade_basic"] = std::to_string(sqlite3_column_double(pgStmt, 0));
+                    employeeDetails["grade_da"] = std::to_string(sqlite3_column_double(pgStmt, 1));
+                    employeeDetails["grade_ta"] = std::to_string(sqlite3_column_double(pgStmt, 2));
+                    employeeDetails["grade_bonus"] = std::to_string(sqlite3_column_double(pgStmt, 3));
+                }
+                sqlite3_finalize(pgStmt);
+            } else {
+                std::cerr << "SQL error in prepare pay grade details: " << sqlite3_errmsg(db) << std::endl;
+            }
+        }
+
+        // Print each detail
+        std::cout << "Employee Details:" << std::endl;
+        for (const auto& detail : employeeDetails) {
+            std::cout << detail.first << ": " << detail.second << std::endl;
+        }
+    } else {
+        std::cout << "No employee found with the name: " << name << std::endl;
     }
 
     sqlite3_finalize(stmt);
