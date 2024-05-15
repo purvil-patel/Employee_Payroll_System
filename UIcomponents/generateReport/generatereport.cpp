@@ -16,7 +16,7 @@ GenerateReport::GenerateReport(QWidget *parent) : QWidget(parent),
                                                   employee(std::make_unique<Employee>(Database::getInstance().getConn()))
 {
     ui->setupUi(this);
-    connect(ui->searchButton, &QPushButton::clicked, this, &GenerateReport::on_searchButton_clicked);
+    //connect(ui->searchButton, &QPushButton::clicked, this, &GenerateReport::on_searchButton_clicked);
     std::cout << "GenerateReport constructor called." << std::endl;
 
     // Set up the headers for the QTableWidget
