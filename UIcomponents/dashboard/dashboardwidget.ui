@@ -115,21 +115,21 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_5">
+       <widget class="QPushButton" name="managePaygrade">
         <property name="text">
          <string>Manage Paygrade</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_6">
+       <widget class="QPushButton" name="manageEmpPayrole">
         <property name="text">
          <string>Manage Employee Payrole</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="generateReport">
         <property name="text">
          <string>Generate Report</string>
         </property>
