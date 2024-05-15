@@ -462,7 +462,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Emp ID(Refer View)</string>
+    <string>Emp ID</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit_3">
