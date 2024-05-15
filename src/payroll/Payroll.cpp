@@ -76,7 +76,7 @@ void Payroll::generatePayroll() {
 }
 
 void Payroll::calculateNetSalary(PayrollDetail &detail, const std::string& payGradeName) {
-    std::string sql = "SELECT grade_basic, grade_da, grade_ta, grade_pf, grade_bonus FROM PayGrade WHERE grade_name = ?";
+    std::string sql = "SELECT grade_basic, grade_da, grade_ta, grade_bonus FROM PayGrade WHERE grade_name = ?";
     sqlite3_stmt *stmt;
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, payGradeName.c_str(), -1, SQLITE_TRANSIENT);
@@ -85,15 +85,20 @@ void Payroll::calculateNetSalary(PayrollDetail &detail, const std::string& payGr
             float basic = sqlite3_column_double(stmt, 0);
             float da = sqlite3_column_double(stmt, 1);
             float ta = sqlite3_column_double(stmt, 2);
-            float pf = sqlite3_column_double(stmt, 3);
-            float bonus = sqlite3_column_double(stmt, 4);
+            float bonus = sqlite3_column_double(stmt, 3);
 
-            detail.net_salary = basic + da + ta + pf + bonus;
+            detail.net_salary = basic + da + ta + bonus;
         }
         sqlite3_finalize(stmt);
     } else {
         std::cerr << "SQL error: " << sqlite3_errmsg(db) << std::endl;
     }
+}
+
+void Payroll::setPayrollDetails(int year, int month, const std::string& issueDate) {
+    this->salary_year = year;
+    this->salary_month = month;
+    this->salary_issue_date = issueDate;
 }
 
 void Payroll::saveToDatabase() {

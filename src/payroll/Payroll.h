@@ -41,6 +41,7 @@ public:
     std::vector<PayrollDetail> getPayrollTable(const std::string& empName = "");
     void displayPayrollRecords(const std::string& empName = "");
     void handlePayrollQuery();
+    void setPayrollDetails(int year, int month, const std::string& issueDate);
 };
 
 #endif
