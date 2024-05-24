@@ -2,8 +2,8 @@
 #include "ui_manageemppayroll.h"
 #include <iostream>
 #include <QMessageBox>
-#include "src/payroll/Payroll.h"
-#include "src/database/Database.h"
+#include "../../src/payroll/Payroll.h"
+#include "../../src/database/Database.h"
 
 ManageEmpPayroll::ManageEmpPayroll(QWidget *parent)
     : QWidget(parent), ui(new Ui::ManageEmpPayroll), payrollHandler(std::make_unique<Payroll>(Database::getInstance().getConn())) {

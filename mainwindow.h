@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "dashboardwidget.h"
+#include "UIcomponents/dashboard/dashboardwidget.h"
 #include <sqlite3.h>
 
 QT_BEGIN_NAMESPACE

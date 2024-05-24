@@ -2,6 +2,9 @@
 #define DEPARTMENTWIDGET_H
 
 #include <QWidget>
+#include "../../src/department/Department.h"
+#include <QStandardItemModel>
+
 
 namespace Ui {
 class Departmentwidget;
@@ -18,8 +21,15 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_submitNewDepartmentButton_clicked();
+
+    void checkInput(const QString &text);
+
 private:
     Ui::Departmentwidget *ui;
+    sqlite3* db;
+    QStandardItemModel* model;
+    std::unique_ptr<Department> department;
 
 signals:
     void backHome();

@@ -1,8 +1,8 @@
 #include "managepaygrade.h"
 #include "ui_managepaygrade.h"
 #include <iostream>
-#include "src/pay_grade/PayGrade.h"
-#include "src/database/Database.h"
+#include "../../src/pay_grade/PayGrade.h"
+#include "../../src/database/Database.h"
 #include <QMessageBox>
 
 ManagePaygrade::ManagePaygrade(QWidget *parent)

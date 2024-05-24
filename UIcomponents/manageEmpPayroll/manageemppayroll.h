@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <memory>
 #include <sqlite3.h>
-#include "src/payroll/Payroll.h"
+#include "../../src/payroll/Payroll.h"
 
 namespace Ui {
 class ManageEmpPayroll;

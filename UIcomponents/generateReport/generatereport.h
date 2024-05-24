@@ -4,9 +4,9 @@
 #include <QWidget>
 #include "ui_generatereport.h"
 #include <sqlite3.h>
-#include "src/department/Department.h"
-#include "src/pay_grade/PayGrade.h"
-#include "src/employee/Employee.h"
+#include "../../src/department/Department.h"
+#include "../../src/pay_grade/PayGrade.h"
+#include "../../src/employee/Employee.h"
 #include <QStandardItemModel>
 
 namespace Ui

@@ -1,10 +1,10 @@
 #include "generatereport.h"
 #include "ui_generatereport.h"
-#include "src/employee/Employee.h"
-#include "src/payroll/Payroll.h"
-#include "src/department/Department.h" // Assuming these are correctly included
-#include "src/pay_grade/PayGrade.h"
-#include "src/database/Database.h"
+#include "../../src/employee/Employee.h"
+#include "../../src/payroll/Payroll.h"
+#include "../../src/department/Department.h" // Assuming these are correctly included
+#include "../../src/pay_grade/PayGrade.h"
+#include "../../src/database/Database.h"
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -16,7 +16,7 @@ GenerateReport::GenerateReport(QWidget *parent) : QWidget(parent),
                                                   employee(std::make_unique<Employee>(Database::getInstance().getConn()))
 {
     ui->setupUi(this);
-    connect(ui->searchButton, &QPushButton::clicked, this, &GenerateReport::on_searchButton_clicked);
+    //connect(ui->searchButton, &QPushButton::clicked, this, &GenerateReport::on_searchButton_clicked);
     std::cout << "GenerateReport constructor called." << std::endl;
 
     // Set up the headers for the QTableWidget

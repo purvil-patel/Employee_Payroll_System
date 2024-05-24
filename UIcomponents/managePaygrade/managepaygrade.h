@@ -3,8 +3,8 @@
 
 #include <QWidget>
 #include <sqlite3.h>
-#include "src/department/Department.h"
-#include "src/pay_grade/PayGrade.h"
+#include "../../src/department/Department.h"
+#include "../../src/pay_grade/PayGrade.h"
 #include <QStandardItemModel>
 
 namespace Ui {

@@ -18,21 +18,21 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        dashboardwidget.cpp
-        dashboardwidget.h
+        UIcomponents/dashboard/dashboardwidget.cpp
+        UIcomponents/dashboard/dashboardwidget.h
         src/user_authentication/Login.h
         src/user_authentication/Login.cpp
         src/database/Database.h
-        dashboardwidget.ui
-        departmentwidget.h
-        departmentwidget.cpp
-        departmentwidget.ui
-        manageemployeewidget.h
-        manageemployeewidget.cpp
-        manageemployeewidget.ui
-        managepaygrade.h
-        managepaygrade.cpp
-        managepaygrade.ui
+        UIcomponents/dashboard/dashboardwidget.ui
+        UIcomponents/department/departmentwidget.h
+        UIcomponents/department/departmentwidget.cpp
+        UIcomponents/department/departmentwidget.ui
+        UIcomponents/manageEmployee/manageemployeewidget.h
+        UIcomponents/manageEmployee/manageemployeewidget.cpp
+        UIcomponents/manageEmployee/manageemployeewidget.ui
+        UIcomponents/managePaygrade/managepaygrade.h
+        UIcomponents/managePaygrade/managepaygrade.cpp
+        UIcomponents/managePaygrade/managepaygrade.ui
         src/department/Department.h
         src/department/Department.cpp
         src/employee/Employee.h
@@ -41,20 +41,20 @@ set(PROJECT_SOURCES
         src/pay_grade/PayGrade.cpp
         src/payroll/Payroll.cpp
         src/payroll/Payroll.h
-        generatereport.h
-        generatereport.cpp
-        generatereport.ui
+        UIcomponents/generateReport/generatereport.h
+        UIcomponents/generateReport/generatereport.cpp
+        UIcomponents/generateReport/generatereport.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Emp_payroll_sys
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        dashboardwidget.h dashboardwidget.cpp dashboardwidget.ui
-        departmentwidget.h departmentwidget.cpp departmentwidget.ui
-        manageemployeewidget.h manageemployeewidget.cpp manageemployeewidget.ui
-        managepaygrade.h managepaygrade.cpp managepaygrade.ui
-        manageemppayroll.h manageemppayroll.cpp manageemppayroll.ui
+        UIcomponents/dashboard/dashboardwidget.h UIcomponents/dashboard/dashboardwidget.cpp UIcomponents/dashboard/dashboardwidget.ui
+        UIcomponents/department/departmentwidget.h UIcomponents/department/departmentwidget.cpp UIcomponents/department/departmentwidget.ui
+        UIcomponents/manageEmployee/manageemployeewidget.h UIcomponents/manageEmployee/manageemployeewidget.cpp UIcomponents/manageEmployee/manageemployeewidget.ui
+        UIcomponents/managePaygrade/managepaygrade.h UIcomponents/managePaygrade/managepaygrade.cpp UIcomponents/managePaygrade/managepaygrade.ui
+        UIcomponents/manageEmpPayroll/manageemppayroll.h UIcomponents/manageEmpPayroll/manageemppayroll.cpp UIcomponents/manageEmpPayroll/manageemppayroll.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Emp_payroll_sys APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
